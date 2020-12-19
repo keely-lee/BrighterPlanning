@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 // import './App.css';
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import Splash from './components/Splash.js';
 import Portfolio from './components/Portfolio.js';
@@ -26,18 +26,14 @@ function App() {
     //   </header>
     // </div>
 
+    // <Splash />
 
-
-    <BrowserRouter>
-      <div>
-        <Switch>
-          <Route/>
-          <Route path="/" component={Splash}/>
-          {/* <Route exact path="/plans" component={Portfolio}/> */}
-          {/* <Route exact path="/calculate" component={}/> */}
-        </Switch>
-      </div>
-    </BrowserRouter>
+    <div>
+      <Switch>
+        <Route exact path="/plans" component={Portfolio}/>
+        <Route path="/" component={Splash}/>
+      </Switch>
+    </div>
   );
 }
 
