@@ -1,0 +1,23 @@
+{
+  "name": "brighterplanning",
+  "version": "1.0.0",
+  "description": "Financial success is at your fingertips. BrighterPlanning guides you towards optimizing your future finances for your individual needs.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keely-lee/BrighterPlanning.git"
+  },
+  "author": "kl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keely-lee/BrighterPlanning/issues"
+  },
+  "homepage": "https://github.com/keely-lee/BrighterPlanning#readme",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-redux": "^7.2.2"
+  }
+}
