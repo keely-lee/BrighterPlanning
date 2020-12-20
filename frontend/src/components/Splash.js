@@ -8,6 +8,7 @@ function Splash(props) {
     <div>
       <h1>HELLO FROM THE SPLASH PAGE</h1>
       <Link to="/plans">Get Started</Link>
+      {/* PUT A FOOTER WITH PERSONAL CONTACT */}
     </div>
   )
 }

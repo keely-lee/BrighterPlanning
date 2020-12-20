@@ -14,12 +14,11 @@ export const grabPortfolios = () => dispatch => {
     { 
       download: true,
       header: true,
-      complete: res => dispatch(receivePortfolio(res)) 
+      complete: res => dispatch(receivePortfolio(res)),
+      error: err => console.log(err)
     }
   )
-    // .then(res => dispatch(receivePortfolio(res)))
-    // .catch(err => console.log(err))
-  }
+}
 
 // export const grabPortfolios = () => dispatch => {
 //   return axios.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vSrmOiZN0aKz30NrPibeQ_LOlaDcYmNWwnkqNMNgI0aQF1qx9tLDtNFlfnDuZIn8BeYC2AILkPohMWr/pub?output=csv')

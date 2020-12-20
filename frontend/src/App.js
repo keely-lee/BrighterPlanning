@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+import Nav from './components/Navbar';
 import Splash from './components/Splash.js';
 import Portfolio from './components/Portfolio.js';
 
@@ -29,6 +30,7 @@ function App() {
     // <Splash />
 
     <div>
+      <Nav/>
       <Switch>
         <Route exact path="/plans" component={Portfolio}/>
         <Route path="/" component={Splash}/>
