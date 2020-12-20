@@ -1,4 +1,4 @@
-import { RECEIVE_PORTFOLIO } from '../actions/portfolio_action';
+import { RECEIVE_PORTFOLIO } from '../actions/portfolio_actions';
 
 const portfoliosReducer = (state = {}, action) => {
   Object.freeze(state);
