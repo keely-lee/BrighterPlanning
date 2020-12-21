@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grabPortfolios } from '../actions/portfolio_actions';
 
+import DonutChart from './DonutChart'
+
 function Portfolio(props) {
   const dispatch = useDispatch();
   const plans = useSelector(state => state.entities.portfolios.data)
 
   useEffect(() => {
-    dispatch(grabPortfolios());
+    dispatch(grabPortfolios())
   }, []); //dispatch on initial mount
 
 
@@ -23,14 +25,14 @@ function Portfolio(props) {
       { tableHeaders ? 
         <table>
           <tbody>
-            <tr>
+            <tr key="plans-row-th">
               { tableHeaders.map((col, idx) => <th key={`th-${idx}`}>{col} {idx === 0 ? "" : "%" }</th>) }
             </tr>
             
             {/* Consider better iterations, heavy runtime. Current priority accurate data. */}
             { plans.map((rowObject, idx) => {
               return (
-                <tr className={`plans-row-${idx}`}>
+                <tr className={`plans-row-${idx}`} key={`tr-${idx}`}>
                   { tableHeaders.map((header,subIdx) => {
                     return <td key={`td-${idx}-${subIdx}`}>{rowObject[header]}</td>
                   }) }
@@ -40,6 +42,7 @@ function Portfolio(props) {
           </tbody>
         </table>
       : null }
+      <DonutChart/>
     </div>
   )
 }
