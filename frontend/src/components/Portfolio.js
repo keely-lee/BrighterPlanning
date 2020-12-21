@@ -30,7 +30,7 @@ function Portfolio(props) {
             {/* Consider better iterations, heavy runtime. Current priority accurate data. */}
             { plans.map((rowObject, idx) => {
               return (
-                <tr>
+                <tr className={`plans-row-${idx}`}>
                   { tableHeaders.map((header,subIdx) => {
                     return <td key={`td-${idx}-${subIdx}`}>{rowObject[header]}</td>
                   }) }
