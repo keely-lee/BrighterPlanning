@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Highcharts from 'highcharts';
+import Highcharts, { Point } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 import { receivePlan } from '../actions/plan_actions';
@@ -26,14 +26,31 @@ function DonutChart(props) {
       'SmallCap': 10,
     }))
 
-    // dispatch(receivePlan(
-    // {
+    // dispatch(receivePlan({
     //   'Risk': 7,
     //   'Bonds': 20,
     //   'LargeCap': 25,
     //   'MidCap': 25,
     //   'Foreign': 25,
     //   'SmallCap': 5,
+    // }))
+
+    // dispatch(receivePlan({
+    //   'Risk': 1,
+    //   'Bonds': 80,
+    //   'LargeCap': 20,
+    //   'MidCap': 0,
+    //   'Foreign': 0,
+    //   'SmallCap': 0,
+    // }))
+
+    // dispatch(receivePlan({
+    //   'Risk': 2,
+    //   'Bonds': 70,
+    //   'LargeCap': 15,
+    //   'MidCap': 12,
+    //   'Foreign': 3,
+    //   'SmallCap': 0,
     // }))
 
   }, [])
@@ -52,6 +69,16 @@ function DonutChart(props) {
         colors: colors,
         allowPointSelect: true,
         cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          pointFormat: '<b>{point.plan}</b><br>{point.y}%',
+          distance: -50,
+          filter: {
+            property: 'percentage',
+            operator: '>',
+            value: 1
+          }
+        }
       }
     },
     // yAxis: {
@@ -61,16 +88,14 @@ function DonutChart(props) {
     // },
     series: [
       {
-        name: "Plans",
-        data: categories.map(key => [key, data[key]]),
+        name: "Plan",
+        data: categories.map(key => { return {plan: key, y: data[key]}}),
         innerSize: '30%',
-        dataLabels: {
-          enabled: false
-        }
       }
     ],
     tooltip: {
-      
+      headerFormat: '<b>{point.plan}</b>',
+      pointFormat: '<b>{point.percentage}%</b>'
     }
   } : null;
 

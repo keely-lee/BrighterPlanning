@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grabPortfolios } from '../actions/portfolio_actions';
 
-import DonutChart from './DonutChart'
-
 function Portfolio(props) {
   const dispatch = useDispatch();
   const plans = useSelector(state => state.entities.portfolios.data)
@@ -42,7 +40,6 @@ function Portfolio(props) {
           </tbody>
         </table>
       : null }
-      <DonutChart/>
     </div>
   )
 }
