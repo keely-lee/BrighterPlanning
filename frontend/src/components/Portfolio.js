@@ -1,23 +1,18 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { grabPortfolios } from '../actions/portfolio_actions';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 function Portfolio(props) {
-  const dispatch = useDispatch();
-  const plans = useSelector(state => state.entities.portfolios.data)
-
-  useEffect(() => {
-    dispatch(grabPortfolios())
-  }, []); //dispatch on initial mount
-
-
+  const plans = props.plans;
   const tableHeaders = plans ? Object.keys(plans[0]) : null;
 
+
+  console.log("RENDERING IN PORTFOLIO SECTION :)")
+  console.log(props)
   return (
-    <div className="plans-main-div">
+    <div className="plans-table-div">
       <h1>HOWDY FROM PORTFOLIO</h1>
 
+{console.log("RENDERING IN BLAH BLAH BLAH")}
       {/* some code in between */}
 
       { tableHeaders ? 

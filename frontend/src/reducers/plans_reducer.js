@@ -4,8 +4,9 @@ const plansReducer = (state = [], action) => {
   Object.freeze(state);
   switch (action.type) {
     case RECEIVE_PLAN: 
-      let newState = Object.assign([], state);
-      newState.push(action.plan)
+      // let newState = Object.assign([], state);
+      // newState.push(action.plan)
+      let newState = [action.plan]
       return newState;
     case UNSELECT_PLAN:
       return state.filter(plans => plans === action.plan);

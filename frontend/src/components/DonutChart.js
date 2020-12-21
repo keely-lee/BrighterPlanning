@@ -7,24 +7,25 @@ import HighchartsReact from 'highcharts-react-official';
 import { receivePlan } from '../actions/plan_actions';
 
 function DonutChart(props) {
+  const data = props.data; //Note: Object keys - 'Risk' is a key. 
   const colors = ['#555B6E', '#89B0AE', '#BEE3DB', '#FFD6BA', '#E89C87'];
-  const data = useSelector(state => state.entities.plans)[0]; //Note: Object keys are 'sorted' alphabetically, 'risk' is a key. 
 
   //  '#EDE9E9',
-
+  // DONUT CHART PLANS #6
 
   const categories = data ? Object.keys(data).filter(ctg => ctg !== 'Risk') : [];
 
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(receivePlan({
-      'Risk': 8,
-      'Bonds': 10,
-      'LargeCap': 20,
-      'MidCap': 40,
-      'Foreign': 20,
-      'SmallCap': 10,
-    }))
+  // useEffect(() => {
+  //   dispatch(receivePlan({
+  //     'Risk': 8,
+  //     'Bonds': 10,
+  //     'LargeCap': 20,
+  //     'MidCap': 40,
+  //     'Foreign': 20,
+  //     'SmallCap': 10,
+  //   }))
 
     // dispatch(receivePlan({
     //   'Risk': 7,
@@ -53,7 +54,7 @@ function DonutChart(props) {
     //   'SmallCap': 0,
     // }))
 
-  }, [])
+  // }, [])
 
 
   const options = data ? {
@@ -89,7 +90,7 @@ function DonutChart(props) {
     series: [
       {
         name: "Plan",
-        data: categories.map(key => { return {plan: key, y: data[key]}}),
+        data: categories.map(key => { return {plan: key, y: parseInt(data[key])} }),
         innerSize: '30%',
       }
     ],

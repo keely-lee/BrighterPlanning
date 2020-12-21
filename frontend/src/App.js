@@ -5,8 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import Nav from './components/Navbar';
 import Splash from './components/Splash.js';
-import Portfolio from './components/Portfolio.js';
-
+import PlansMain from './components/PlansMain';
 
 function App() {
   return (
@@ -32,7 +31,7 @@ function App() {
     <div>
       <Nav/>
       <Switch>
-        <Route exact path="/plans" component={Portfolio}/>
+        <Route exact path="/plans" component={PlansMain}/>
         <Route path="/" component={Splash}/>
       </Switch>
     </div>
