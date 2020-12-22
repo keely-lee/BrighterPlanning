@@ -8,6 +8,8 @@ import DonutChart from './DonutChart';
 import { grabPortfolios } from '../actions/portfolio_actions';
 import { receivePlan } from '../actions/plan_actions';
 
+import '../stylesheets/plansMain.css';
+
 function PlansMain(props) {
   const dispatch = useDispatch();
   const portfolios = useSelector(state => state.entities.portfolios.data)
@@ -21,25 +23,21 @@ function PlansMain(props) {
   console.log("BEEP BOOP PLANS MAIN")
   console.log("--------")
   return (
-    <div>
-      <Portfolio 
-        plans={portfolios} 
-        chosenPlans={data}
-        selectPlan={(plan) => { dispatch(receivePlan(plan)) }}
-        // eventually will be dispatch multiple plans
-      />
+    <div className="plans-main-div">
+      <div className="plans-main-base">
+        <Portfolio 
+          plans={portfolios} 
+          chosenPlans={data}
+          selectPlan={(plan) => { dispatch(receivePlan(plan)) }}
+          // eventually add dispatch multiple plans
+        />
 
-      { data.length === 1 ? <DonutChart data={data[0]}/> : null }
-
-      {/* { portfolios ? 
-      <div>
-        <button type="button" onClick={() => {dispatch(receivePlan(portfolios[0]))}}>  update 1  </button>
-        <button type="button" onClick={() => {dispatch(receivePlan(portfolios[1]))}}>  update 2  </button>
-        <button type="button" onClick={() => {dispatch(receivePlan(portfolios[2]))}}>  update 3  </button>
+        {/* eventually some button for compare options */}
+        <Link to="/personalize">Calculate</Link>
       </div>
-      : null } */}
-
-      <Link to="/personalize">Calculate</Link>
+      <div className="plans-main-charts">
+        { data.length === 1 ? <DonutChart data={data[0]}/> : null }
+      </div>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import '../stylesheets/portfolios.css';
+
 function Portfolio(props) {
   const plans = props.plans;
   const tableHeaders = plans ? Object.keys(plans[0]) : null;
