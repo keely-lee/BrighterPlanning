@@ -22,7 +22,7 @@ function PlansMain(props) {
   console.log("--------")
   return (
     <div>
-      <Portfolio plans={portfolios}/>
+      <Portfolio plans={portfolios} />
       <DonutChart data={data}/>
 
       { portfolios ? 
@@ -32,6 +32,8 @@ function PlansMain(props) {
         <button type="button" onClick={() => {dispatch(receivePlan(portfolios[2]))}}>  update 3  </button>
       </div>
       : null }
+
+      <Link to="/personalize">Calculate</Link>
     </div>
   )
 }
