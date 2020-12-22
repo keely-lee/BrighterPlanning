@@ -13,7 +13,7 @@ function UserInfo() {
   useEffect(() => {
     const stateVars = {};
     headers.forEach(ctg => {
-      stateVars[ctg] = null;
+      stateVars[ctg]= null;
     })
     setUserPortfolio(stateVars)
   }, [])
@@ -32,7 +32,7 @@ function UserInfo() {
       }
 
       //checks for valid number entered: max two decimal places, adjust for $ sign
-      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1]))) return setInputErrors(Object.assign({}, inputErrors, { category: true })) //consider using a set
+      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1]))) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set
       if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
 
       // check validity: appropriate commas
@@ -52,6 +52,21 @@ function UserInfo() {
     }
   }
 
+  function confirmValid() {
+    console.log(inputErrors)
+    console.log(userPortfolio)
+    console.log("errors, then portfolio")
+    // if (Object.values(userPortfolio).some(ele => )   )
+    return true;
+  }
+
+  function calculate(e) {
+    e.preventDefault();
+    if (confirmValid()) {
+      console.log("calculating")
+    }
+  }
+
   return (
     <div className="personalize-main-div">
       <h1>Personalize Your Portfolio</h1>
@@ -62,7 +77,7 @@ function UserInfo() {
           <div>
             <h4>Risk Level {currPlan['Risk']}</h4>
             { headers.map(ctg => (
-              <div>
+              <div key={ctg}>
                 <span>{ctg}</span>
                 <span>{currPlan[ctg]}%</span>
               </div>
@@ -73,7 +88,7 @@ function UserInfo() {
 
       <h3>Tell us about your current portfolio: </h3>
 
-      <form>
+      <form onSubmit={calculate}>
         { headers.map(ctg => {
           return (
             <div key={ctg}>
@@ -85,6 +100,8 @@ function UserInfo() {
             </div>
           )
         }) }
+
+        <button>Plan Bright!</button>
       </form>
 
     </div>
