@@ -62,12 +62,10 @@ function UserInfo() {
           <div>
             <h4>Risk Level {currPlan['Risk']}</h4>
             { headers.map(ctg => (
-              // return (
-                <div>
-                  <span>{ctg}</span>
-                  <span>{currPlan[ctg]}%</span>
-                </div>
-              // )
+              <div>
+                <span>{ctg}</span>
+                <span>{currPlan[ctg]}%</span>
+              </div>
             )) }
           </div>
         ) : <Link to="/plans">Choose a plan that's right for you!</Link> }
