@@ -11,7 +11,7 @@ import { receivePlan } from '../actions/plan_actions';
 function PlansMain(props) {
   const dispatch = useDispatch();
   const portfolios = useSelector(state => state.entities.portfolios.data)
-  const data = useSelector(state => state.entities.plans)[0];
+  const data = useSelector(state => state.entities.plans);
 
 
   useEffect(() => {
@@ -22,16 +22,22 @@ function PlansMain(props) {
   console.log("--------")
   return (
     <div>
-      <Portfolio plans={portfolios} />
-      <DonutChart data={data}/>
+      <Portfolio 
+        plans={portfolios} 
+        chosenPlans={data}
+        selectPlan={(plan) => { dispatch(receivePlan(plan)) }}
+        // eventually will be dispatch multiple plans
+      />
 
-      { portfolios ? 
+      { data.length === 1 ? <DonutChart data={data[0]}/> : null }
+
+      {/* { portfolios ? 
       <div>
         <button type="button" onClick={() => {dispatch(receivePlan(portfolios[0]))}}>  update 1  </button>
         <button type="button" onClick={() => {dispatch(receivePlan(portfolios[1]))}}>  update 2  </button>
         <button type="button" onClick={() => {dispatch(receivePlan(portfolios[2]))}}>  update 3  </button>
       </div>
-      : null }
+      : null } */}
 
       <Link to="/personalize">Calculate</Link>
     </div>

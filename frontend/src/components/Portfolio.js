@@ -1,18 +1,17 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
 
 function Portfolio(props) {
   const plans = props.plans;
   const tableHeaders = plans ? Object.keys(plans[0]) : null;
 
+  // const [compare, selectCompare] = useState(false);
 
-  console.log("RENDERING IN PORTFOLIO SECTION :)")
-  console.log(props)
+
   return (
     <div className="plans-table-div">
-      <h1>HOWDY FROM PORTFOLIO</h1>
+      <h1>Explore Portfolio Plans</h1>
 
-{console.log("RENDERING IN BLAH BLAH BLAH")}
+{console.log("RENDERING IN PORTFOLIO RETURN")}
       {/* some code in between */}
 
       { tableHeaders ? 
@@ -25,7 +24,9 @@ function Portfolio(props) {
             {/* Consider better iterations, heavy runtime. Current priority accurate data. */}
             { plans.map((rowObject, idx) => {
               return (
-                <tr className={`plans-row-${idx}`} key={`tr-${idx}`}>
+                <tr className={`plans-row-${idx}`} 
+                  key={`tr-${idx}`}
+                  onClick={() => props.selectPlan(rowObject)}>
                   { tableHeaders.map((header,subIdx) => {
                     return <td key={`td-${idx}-${subIdx}`}>{rowObject[header]}</td>
                   }) }
