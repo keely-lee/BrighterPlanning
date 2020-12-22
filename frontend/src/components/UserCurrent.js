@@ -6,20 +6,49 @@ function UserInfo() {
   const currPlan = useSelector(state => state.entities.plans)[0];
   const headers = currPlan ? Object.keys(currPlan).filter(hdrs => hdrs !== "Risk"): [];
 
-  // Must know num of variables in header, for hardcoding state
   const [ userPortfolio, setUserPortfolio ] = useState({});
+  const [ inputErrors, setInputErrors ] = useState({}); //modifying a set repeatedly will likely be costly
 
   // componentDidMount
   useEffect(() => {
-    const setStateVars = {};
+    const stateVars = {};
     headers.forEach(ctg => {
-      setStateVars[ctg] = null;
+      stateVars[ctg] = null;
     })
+    setUserPortfolio(stateVars)
   }, [])
 
   function updateAmount(category) {
     return e => {
-      // this.set
+      //figure out regex solution if you have time
+      // const entered = e.currentTarget.value.replace(/,/g, ""); 
+      let entered = e.currentTarget.value.split(".");
+
+      //when potentially fixing error, clear the error
+      if ( inputErrors[category] ) {
+        const tempErrors = Object.assign({}, inputErrors);
+        delete tempErrors[category];
+        setInputErrors(tempErrors);
+      }
+
+      //checks for valid number entered: max two decimal places, adjust for $ sign
+      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1]))) return setInputErrors(Object.assign({}, inputErrors, { category: true })) //consider using a set
+      if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
+
+      // check validity: appropriate commas
+      for (let i = entered[0].length-4; i > 0; i-=4) { 
+        if (entered[0][i] === ",") entered[0] = entered[0].slice(0, i) + entered[0].slice(i+1); 
+        else break;
+      }
+
+      if (!isNaN(entered.join("."))) {
+        const newState = Object.assign({}, userPortfolio);
+        newState[category] = entered.join(".");
+        setUserPortfolio(newState);
+      } 
+      else {
+        setInputErrors(Object.assign({}, inputErrors, { category: true }))
+      }
     }
   }
 
@@ -32,14 +61,14 @@ function UserInfo() {
         { currPlan ? (
           <div>
             <h4>Risk Level {currPlan['Risk']}</h4>
-            { headers.map(ctg => {
-              return (
+            { headers.map(ctg => (
+              // return (
                 <div>
                   <span>{ctg}</span>
                   <span>{currPlan[ctg]}%</span>
                 </div>
-              )
-            }) }
+              // )
+            )) }
           </div>
         ) : <Link to="/plans">Choose a plan that's right for you!</Link> }
       </section>
@@ -49,7 +78,7 @@ function UserInfo() {
       <form>
         { headers.map(ctg => {
           return (
-            <div>
+            <div key={ctg}>
               <label htmlFor={ctg}>{ctg}</label>
               <input type="text"
                 onChange={updateAmount(ctg)}
