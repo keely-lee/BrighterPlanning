@@ -16,6 +16,7 @@ function DonutChart(props) {
   const categories = data ? Object.keys(data).filter(ctg => ctg !== 'Risk') : [];
 
 
+
   const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(receivePlan({
@@ -101,9 +102,9 @@ function DonutChart(props) {
   } : null;
 
   return (
-
     // categories
     <div>
+      {console.log("RAWR DONUTSSS")}
       <h1>DONUT CHART</h1>
       { data ? 
       <HighchartsReact highcharts={Highcharts} options={options} />

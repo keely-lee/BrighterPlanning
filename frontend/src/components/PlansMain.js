@@ -32,6 +32,8 @@ function PlansMain(props) {
         <button type="button" onClick={() => {dispatch(receivePlan(portfolios[2]))}}>  update 3  </button>
       </div>
       : null }
+
+      <Link to="/personalize">Calculate</Link>
     </div>
   )
 }
