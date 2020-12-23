@@ -36,8 +36,8 @@ function UserInfo() {
         setInputErrors(tempErrors);
       }
 
-      //checks for valid number entered: max two decimal places, adjust for $ sign. Use better validity checks!!
-      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1])) || (entered.length === 2 && entered[1].toString().length > 2)) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set
+      //checks for valid number entered: max two decimal places, adjust for $ sign. Use better validity checks!!  //if length of decimal is more than 2, must be === 0 or parseFloat will make length less than 2 (meaning 0s only after 2nd decimal)
+      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1])) || (entered.length === 2 && entered[1].length > 2)) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set
       if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
 
       // check validity: appropriate commas
@@ -115,11 +115,10 @@ function UserInfo() {
           // console.log(setNumber);
         } //moreThanRec[userPortfolio[ctg] - recPortfolio[ctg]] = ctg;
 
-        console.log(lessThanRec)
-        console.log(moreThanRec)
-
-        console.log(`-----`)
       })
+      console.log(lessThanRec)
+      console.log(moreThanRec)
+      console.log(`less, more`)
 
       setRecPortfolio(recPortfolio);
       // console.log(recPortfolio)
@@ -127,7 +126,7 @@ function UserInfo() {
 
       if (!Object.keys(moreThanRec).length) return; //no transfers needed - portfolio matches recommended plan
 
-      // first grab any matching
+      // first grab any matching differences
       let tooMuch = Object.keys(moreThanRec);
       for (let i = 0; i < tooMuch.length; i++) {
         const currAmt = tooMuch[i];
@@ -135,12 +134,21 @@ function UserInfo() {
           while (moreThanRec[currAmt].length && lessThanRec[currAmt].length) {
             recTrans.push(`Transfer $${currAmt} from ${moreThanRec[currAmt].pop()} to ${lessThanRec[currAmt].pop()}`);
           }
+
+          if (lessThanRec[currAmt].length) {
+            delete moreThanRec[currAmt];
+            i--; //CONFIRM THAT TOO MUCH DOES NOT GET RE-EVALUATED!!
+          }
+          else delete lessThanRec[currAmt]
         }
       }
 
 
       // check if any numbers add up to amount needed 
-      
+      // insertion sort both Object.keys(more & less than). then use the larger of the "lessThan" to find the moreThan best routes that add up
+
+
+      //consider approaching target by helper function that calculates least number of iterations to get there plus least number of extra elements used
 
       console.log(recTrans);
 
