@@ -9,13 +9,19 @@ function UserInfo() {
   const [ userPortfolio, setUserPortfolio ] = useState({});
   const [ inputErrors, setInputErrors ] = useState({}); //modifying a set repeatedly will likely be costly
 
-  // componentDidMount
+  const [ recPortfolio, setRecPortfolio ] = useState({}); 
+
+
+  // componentDidMount - set base for user's info & recommended info
   useEffect(() => {
     const stateVars = {};
+    const stateVarsRec = {};
     headers.forEach(ctg => {
-      stateVars[ctg]= null;
+      stateVars[ctg] = null;
+      stateVarsRec[ctg] = 0.00;
     })
-    setUserPortfolio(stateVars)
+    setUserPortfolio(stateVars);
+    setRecPortfolio(stateVarsRec);
   }, [])
 
   function updateAmount(category) {
@@ -47,7 +53,7 @@ function UserInfo() {
         setUserPortfolio(newState);
       } 
       else {
-        setInputErrors(Object.assign({}, inputErrors, { category: true }))
+        setInputErrors(Object.assign({}, inputErrors, { [category]: true }))
       }
     }
   }
@@ -56,15 +62,33 @@ function UserInfo() {
     console.log(inputErrors)
     console.log(userPortfolio)
     console.log("errors, then portfolio")
-    // if (Object.values(userPortfolio).some(ele => )   )
-    return true;
+    // confirm no errors, confirm at least one entry entered
+    if (Object.keys(inputErrors).length || !Object.values(userPortfolio).some(ele => ele)) return false;
+    else return true;
   }
 
   function calculate(e) {
     e.preventDefault();
     if (confirmValid()) {
       console.log("calculating")
+
+      const total = Object.values(userPortfolio).reduce((subTotal, float) => {
+        if (float) return subTotal + parseFloat(float);
+        else return subTotal;
+      }, 0.0)
+
+      const recommended = {};
+      headers.forEach(ctg => {
+        recommended[ctg] = parseInt(currPlan[ctg])/100 * total;
+      })
+
+      console.log(recommended)
+      console.log("recommended")
+
+
+
     }
+    else console.log("FULL OF ERRORS")
   }
 
   return (
@@ -95,7 +119,7 @@ function UserInfo() {
               <label htmlFor={ctg}>{ctg}</label>
               <input type="text"
                 onChange={updateAmount(ctg)}
-                id={ctg} 
+                className={`input-${ctg}`} 
               />
             </div>
           )
