@@ -58,9 +58,9 @@ function UserInfo() {
   }
 
   function confirmValid() {
-    console.log(inputErrors)
-    console.log(userPortfolio)
-    console.log("errors, then portfolio")
+    // console.log(inputErrors)
+    // console.log(userPortfolio)
+    // console.log("errors, then portfolio")
     // confirm no errors, confirm at least one entry entered
     if (Object.keys(inputErrors).length || !Object.values(userPortfolio).some(ele => ele)) return false;
     else return true;
@@ -69,9 +69,12 @@ function UserInfo() {
   function calculate(e) {
     e.preventDefault();
     if (confirmValid()) {
+      // Research accounting concepts
+
       console.log("calculating")
 
       // PROPERLY ROUND FLOATS = Math.round((num + Number.EPSILON) * 100) / 100 
+      // NOT BULLET PROOF SOLUTIONS, CONTEMPLATE MORE LATER
 
       const total = Object.values(userPortfolio).reduce((subTotal, float) => {
         if (float) return subTotal + parseFloat(float);
@@ -81,33 +84,35 @@ function UserInfo() {
       const recPortfolio = {};
       const lessThanRec = {}; //key/value => amount needed: category      ---> none of these categories should transfer out
       const moreThanRec = {}; //key/value => amount extra: category
-      const recTrans = {};
+      const recTrans = [];
       headers.forEach(ctg => {
         recPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
 
-        console.log(parseFloat(recPortfolio[ctg]))
-        console.log(parseFloat(userPortfolio[ctg]))
+        // console.log(parseFloat(recPortfolio[ctg]))
+        // console.log(parseFloat(userPortfolio[ctg]))
 
-        console.log(`category is ${ctg}`)
-        console.log(recPortfolio[ctg])
-        console.log(userPortfolio[ctg])
+        // console.log(`category is ${ctg}`)
+        // console.log(recPortfolio[ctg])
+        // console.log(userPortfolio[ctg])
 
 
 
         if (recPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
 
         if (recPortfolio[ctg] > userPortfolio[ctg]) {
-          console.log("recommended is more than current"); 
+          // console.log("recommended is more than current"); 
           const setNumber = Math.round((recPortfolio[ctg] - userPortfolio[ctg] + Number.EPSILON) * 100) / 100;
-          lessThanRec[setNumber] = ctg
-          console.log(setNumber)
+          if (lessThanRec[setNumber]) lessThanRec[setNumber].push(ctg);
+          else lessThanRec[setNumber] = [ctg];
+          // console.log(setNumber)
         } //lessThanRec[recPortfolio[ctg] - userPortfolio[ctg]] = ctg;
 
         else {
-          console.log("recommended is less than current"); 
+          // console.log("recommended is less than current"); 
           const setNumber = Math.round((userPortfolio[ctg] - recPortfolio[ctg] + Number.EPSILON) * 100) / 100;
-          moreThanRec[setNumber] = ctg
-          console.log(setNumber);
+          if (moreThanRec[setNumber]) moreThanRec[setNumber].push(ctg);
+          else moreThanRec[setNumber] = [ctg];
+          // console.log(setNumber);
         } //moreThanRec[userPortfolio[ctg] - recPortfolio[ctg]] = ctg;
 
         console.log(lessThanRec)
@@ -116,14 +121,28 @@ function UserInfo() {
         console.log(`-----`)
       })
 
-
       setRecPortfolio(recPortfolio);
-      console.log(recPortfolio)
-      console.log("recPortfolio")
+      // console.log(recPortfolio)
+      // console.log("recPortfolio")
+
+      if (!Object.keys(moreThanRec).length) return; //no transfers needed - portfolio matches recommended plan
+
+      // first grab any matching
+      let tooMuch = Object.keys(moreThanRec);
+      for (let i = 0; i < tooMuch.length; i++) {
+        const currAmt = tooMuch[i];
+        if (lessThanRec[currAmt]) {
+          while (moreThanRec[currAmt].length && lessThanRec[currAmt].length) {
+            recTrans.push(`Transfer $${currAmt} from ${moreThanRec[currAmt].pop()} to ${lessThanRec[currAmt].pop()}`);
+          }
+        }
+      }
 
 
+      // check if any numbers add up to amount needed 
+      
 
-
+      console.log(recTrans);
 
 
 
