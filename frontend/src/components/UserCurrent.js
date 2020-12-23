@@ -84,7 +84,15 @@ function UserInfo() {
       const recPortfolio = {};
       const lessThanRec = {}; //key/value => amount needed: category      ---> none of these categories should transfer out
       const moreThanRec = {}; //key/value => amount extra: category
-      const recTrans = [];
+      const recTrans = []; //Array of: key/value => amount needed: [more than amount, more than amount, ...] (key = sumof values). Last entries will be split trans
+
+
+                // Dijkstra's algo inspiration
+
+                //first grab all "nodes", sorted
+                let tooLittle = []; //sorted smallest to largest (pop() is faster than shift(), eval largest first)
+                let tooMuch = []; 
+
       headers.forEach(ctg => {
         recPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
 
@@ -97,6 +105,7 @@ function UserInfo() {
 
 
 
+
         if (recPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
 
         if (recPortfolio[ctg] > userPortfolio[ctg]) {
@@ -105,6 +114,8 @@ function UserInfo() {
           if (lessThanRec[setNumber]) lessThanRec[setNumber].push(ctg);
           else lessThanRec[setNumber] = [ctg];
           // console.log(setNumber)
+
+          tooLittle.push(setNumber); 
         } //lessThanRec[recPortfolio[ctg] - userPortfolio[ctg]] = ctg;
 
         else {
@@ -113,6 +124,8 @@ function UserInfo() {
           if (moreThanRec[setNumber]) moreThanRec[setNumber].push(ctg);
           else moreThanRec[setNumber] = [ctg];
           // console.log(setNumber);
+
+          tooMuch.push(setNumber);
         } //moreThanRec[userPortfolio[ctg] - recPortfolio[ctg]] = ctg;
 
       })
@@ -127,21 +140,129 @@ function UserInfo() {
       if (!Object.keys(moreThanRec).length) return; //no transfers needed - portfolio matches recommended plan
 
       // first grab any matching differences
-      let tooMuch = Object.keys(moreThanRec);
-      for (let i = 0; i < tooMuch.length; i++) {
-        const currAmt = tooMuch[i];
-        if (lessThanRec[currAmt]) {
-          while (moreThanRec[currAmt].length && lessThanRec[currAmt].length) {
-            recTrans.push(`Transfer $${currAmt} from ${moreThanRec[currAmt].pop()} to ${lessThanRec[currAmt].pop()}`);
-          }
+      // let exceded = Object.keys(moreThanRec);
+      // for (let i = 0; i < exceded.length; i++) {
+      //   const currAmt = exceded[i];
+      //   if (lessThanRec[currAmt]) {
+      //     while (moreThanRec[currAmt].length && lessThanRec[currAmt].length) {
+      //       recTrans.push(`Transfer $${currAmt} from ${moreThanRec[currAmt].pop()} to ${lessThanRec[currAmt].pop()}`);
+      //     }
 
-          if (lessThanRec[currAmt].length) {
-            delete moreThanRec[currAmt];
-            i--; //CONFIRM THAT TOO MUCH DOES NOT GET RE-EVALUATED!!
+      //     if (lessThanRec[currAmt].length) delete moreThanRec[currAmt];
+      //     else delete lessThanRec[currAmt];
+      //   }
+      // }
+
+      // // Dijkstra's algo inspiration
+
+      // //first grab all "nodes", sorted
+      // let tooLittle = Object.keys(lessThanRec); //sorted smallest to largest (pop() is faster than shift(), eval largest first)
+      // let tooMuch = Object.keys(moreThanRec); 
+
+      // insertionSort (small sized array)
+      function insertionSort (inputArr) {
+        let length = inputArr.length;
+        for (let i = 1; i < length; i++) {
+          let key = inputArr[i];
+          let j = i-1;
+          while (j >= 0 && inputArr[j] > key) {
+            inputArr[j+1] = inputArr[j];
+            j = j-1;
           }
-          else delete lessThanRec[currAmt]
+          inputArr[j+1] = key;
+        }
+        return inputArr;
+      }
+
+      insertionSort(tooLittle);
+      insertionSort(tooMuch);
+
+      // console.log(tooLittle)
+      // console.log(tooMuch)
+      // console.log("tooLittle, tooMuch")
+
+      function modBSearch(arr, target) {
+        if (target < arr[0]) return -1; //used to avoid split transfers until necessary
+        if (target > arr[arr.length-1]) return arr.length-1;
+
+        let mid;
+        let left = 0;
+        let right = arr.length;
+        
+        while (left < right) {
+          mid = Math.floor((left + right)/2);
+
+          if (arr[mid] === target) return mid;
+          if (arr[mid] > target) right = mid;
+          else left = mid+1;
+        }
+
+        return mid;
+      } //returns matching index or index of last element less than target
+
+      //find subset of sums
+      let sums = {}; //key:val => length of smallest combo: array of subarray sums 
+      function subsetSum(arr, target, partial = [], sum = 0) { //modify this later to stop when it hits more than target (sorted array)
+        if (sum < target) arr.forEach((num, i) => subsetSum(arr.slice(i + 1), target, partial.concat([num]), sum + num));
+        else if (sum === target) {
+          if (sums[partial.length]) sums[partial.length].push(partial);
+          else sums[partial.length] = [partial];
         }
       }
+
+      subsetSum([1,2,3,4,5,6,7], 10)
+      console.log(sums)
+      console.log("subset")
+
+
+      let smallestNumTrans = 0;
+      let amountS = []; 
+
+      while(smallestNumTrans <= 2) {
+        for (let i = tooLittle.length-1; i > 0; i--) {
+          const startIdx = modBSearch(tooMuch, tooLittle[i]);
+          console.log("IN SIDE THE FOR LOOPS")
+          switch (startIdx) {
+            case -1: return; //all the lesser than amounts are smaller than the smallest larger than. split transactions needed
+            case tooMuch[startIdx] === tooLittle[i]: //first round, optimal, least amount of transfers (matching amounts)
+              smallestNumTrans = 1;
+              recTrans.push({[tooLittle[i]]: [tooMuch[startIdx]]})
+              tooLittle = tooLittle.slice(0, i).concat(tooLittle.slice(i+1));
+              tooMuch = tooMuch.slice(0, startIdx).concat(tooMuch.slice(startIdx+1));
+              console.log(recTrans)
+              console.log("recTrans")
+              break;
+            default: 
+              console.log("in default")
+              console.log(tooLittle)
+              console.log(tooMuch)
+              sums = {}; //reset sums after each iteration
+              subsetSum(tooMuch.slice(0, startIdx+1), tooLittle[i]);
+              const numTrans = parseInt(Object.keys(sums)[0]);
+              
+              // console.log(sums)
+              // console.log("sums")
+              if (numTrans < smallestNumTrans || !smallestNumTrans || numTrans === smallestNumTrans+1) {
+                smallestNumTrans = numTrans;
+                // amountS = sums[Object.keys(sums)[0].pop()]
+              }
+
+              break; 
+            // return; //reavluate later
+          }
+        }
+      }
+      // for (let i = amountS.length; i > 0; i--) {
+
+      // }
+
+
+
+
+
+
+
+
 
 
       // check if any numbers add up to amount needed 
@@ -151,7 +272,6 @@ function UserInfo() {
       //consider approaching target by helper function that calculates least number of iterations to get there plus least number of extra elements used
 
       console.log(recTrans);
-
 
 
     }
