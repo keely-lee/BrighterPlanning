@@ -17,8 +17,8 @@
 
 
 .plans-main-charts {
-  margin: auto;
-  /* NEED TO CONSIDER BACKGROUND COLOR */
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .plans-main-charts > div {
@@ -34,6 +34,6 @@
 
 
 /* DonutChart */
-.donut-chart-div {
-  /* background-color: transparent; */
+.donut-chart-div rect {
+  fill: none;
 }

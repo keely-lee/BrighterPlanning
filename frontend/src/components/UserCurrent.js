@@ -6,22 +6,21 @@ function UserInfo() {
   const currPlan = useSelector(state => state.entities.plans)[0];
   const headers = currPlan ? Object.keys(currPlan).filter(hdrs => hdrs !== "Risk"): [];
 
+  // consider storing user's (valid entries) portfolio to store
   const [ userPortfolio, setUserPortfolio ] = useState({});
   const [ inputErrors, setInputErrors ] = useState({}); //modifying a set repeatedly will likely be costly
 
-  const [ recPortfolio, setRecPortfolio ] = useState({}); 
+  const [ recPortfolio, setRecPortfolio ] = useState({});
+  const [ recTransfers, setRecTransfers ] = useState([]);  
 
 
   // componentDidMount - set base for user's info & recommended info
   useEffect(() => {
     const stateVars = {};
-    const stateVarsRec = {};
     headers.forEach(ctg => {
-      stateVars[ctg] = null;
-      stateVarsRec[ctg] = 0.00;
+      stateVars[ctg] = 0.0;
     })
     setUserPortfolio(stateVars);
-    setRecPortfolio(stateVarsRec);
   }, [])
 
   function updateAmount(category) {
@@ -37,8 +36,8 @@ function UserInfo() {
         setInputErrors(tempErrors);
       }
 
-      //checks for valid number entered: max two decimal places, adjust for $ sign
-      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1]))) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set
+      //checks for valid number entered: max two decimal places, adjust for $ sign. Use better validity checks!!
+      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1])) || (entered.length === 2 && entered[1].toString().length > 2)) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set
       if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
 
       // check validity: appropriate commas
@@ -49,7 +48,7 @@ function UserInfo() {
 
       if (!isNaN(entered.join("."))) {
         const newState = Object.assign({}, userPortfolio);
-        newState[category] = entered.join(".");
+        newState[category] = parseFloat(entered.join("."));
         setUserPortfolio(newState);
       } 
       else {
@@ -72,18 +71,59 @@ function UserInfo() {
     if (confirmValid()) {
       console.log("calculating")
 
+      // PROPERLY ROUND FLOATS = Math.round((num + Number.EPSILON) * 100) / 100 
+
       const total = Object.values(userPortfolio).reduce((subTotal, float) => {
         if (float) return subTotal + parseFloat(float);
         else return subTotal;
       }, 0.0)
 
-      const recommended = {};
+      const recPortfolio = {};
+      const lessThanRec = {}; //key/value => amount needed: category      ---> none of these categories should transfer out
+      const moreThanRec = {}; //key/value => amount extra: category
+      const recTrans = {};
       headers.forEach(ctg => {
-        recommended[ctg] = parseInt(currPlan[ctg])/100 * total;
+        recPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
+
+        console.log(parseFloat(recPortfolio[ctg]))
+        console.log(parseFloat(userPortfolio[ctg]))
+
+        console.log(`category is ${ctg}`)
+        console.log(recPortfolio[ctg])
+        console.log(userPortfolio[ctg])
+
+
+
+        if (recPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
+
+        if (recPortfolio[ctg] > userPortfolio[ctg]) {
+          console.log("recommended is more than current"); 
+          const setNumber = Math.round((recPortfolio[ctg] - userPortfolio[ctg] + Number.EPSILON) * 100) / 100;
+          lessThanRec[setNumber] = ctg
+          console.log(setNumber)
+        } //lessThanRec[recPortfolio[ctg] - userPortfolio[ctg]] = ctg;
+
+        else {
+          console.log("recommended is less than current"); 
+          const setNumber = Math.round((userPortfolio[ctg] - recPortfolio[ctg] + Number.EPSILON) * 100) / 100;
+          moreThanRec[setNumber] = ctg
+          console.log(setNumber);
+        } //moreThanRec[userPortfolio[ctg] - recPortfolio[ctg]] = ctg;
+
+        console.log(lessThanRec)
+        console.log(moreThanRec)
+
+        console.log(`-----`)
       })
 
-      console.log(recommended)
-      console.log("recommended")
+
+      setRecPortfolio(recPortfolio);
+      console.log(recPortfolio)
+      console.log("recPortfolio")
+
+
+
+
 
 
 
@@ -127,6 +167,13 @@ function UserInfo() {
 
         <button>Plan Bright!</button>
       </form>
+      
+      { Object.keys(recPortfolio).length ? (
+
+        null 
+
+      ) : null }
+
 
     </div>
   )
