@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import '../stylesheets/userCurrent.css';
+
 function UserInfo() {
   const currPlan = useSelector(state => state.entities.plans)[0];
   const headers = currPlan ? Object.keys(currPlan).filter(hdrs => hdrs !== "Risk"): [];
@@ -244,7 +246,8 @@ function UserInfo() {
       // max amount of excess combos will be limited to number of risk types (ie five)
       // bestNumCombos = 2; bestNumCombos++ each iteration until reaching pos/neg length
 
-
+      console.log(recTrans)
+      console.log("recTrans")
 
     }
     else console.log("FULL OF ERRORS")
@@ -252,47 +255,59 @@ function UserInfo() {
 
   return (
     <div className="personalize-main-div">
+      <img src="https://pixabay.com/get/54e0dd424b54a414f6da8c7dda3536781537d6e15555774a_1280.jpg"/>
+      {/* <img src="https://pixabay.com/get/55e7d6424950ac14f6d1867dda3536781537d6e155567841_1920.jpg"/> */}
+
       <h1>Personalize Your Portfolio</h1>
 
-
-      <section>
-        { currPlan ? (
-          <div>
-            <h4>Risk Level {currPlan['Risk']}</h4>
-            { headers.map(ctg => (
-              <div key={ctg}>
-                <span>{ctg}</span>
-                <span>{currPlan[ctg]}%</span>
+      <div className="personalize-div-wrapper">
+        <div className="personalize-right">
+          <section className="risk-section">
+            { currPlan ? (
+              <div>
+                <h4 id="risk-section-header">Risk Level {currPlan['Risk']}</h4>
+                { headers.map(ctg => (
+                  <div key={ctg}>
+                    <span>{ctg}</span>
+                    <span>{currPlan[ctg]}%</span>
+                  </div>
+                )) }
               </div>
-            )) }
+            ) : <Link to="/plans">Choose a plan that's right for you!</Link> }
+          </section>
+        </div>
+
+        <div className="personalize-left">
+          <div className="personalize-risk-section">
+            <h3>Tell us about your current portfolio: </h3>
+            <form onSubmit={calculate}>
+              { headers.map(ctg => {
+                return (
+                  <div key={ctg}>
+                    <label htmlFor={ctg}>{ctg}</label>
+                    <input type="text"
+                      onChange={updateAmount(ctg)}
+                      className={`input-${ctg}`} 
+                    />
+                  </div>
+                )
+              }) }
+
+              <button>Plan Bright!</button>
+            </form>
+            
           </div>
-        ) : <Link to="/plans">Choose a plan that's right for you!</Link> }
-      </section>
+          { Object.keys(recPortfolio).length ? (
 
-      <h3>Tell us about your current portfolio: </h3>
-
-      <form onSubmit={calculate}>
-        { headers.map(ctg => {
-          return (
-            <div key={ctg}>
-              <label htmlFor={ctg}>{ctg}</label>
-              <input type="text"
-                onChange={updateAmount(ctg)}
-                className={`input-${ctg}`} 
-              />
+            <div className="recommended-plan-div">
+              <h3>Recommended Plan</h3>
+              {headers.map((ctg, idx) => (<p key={`${ctg}-${idx}`}>$ {recPortfolio[ctg]}</p>))}
             </div>
-          )
-        }) }
 
-        <button>Plan Bright!</button>
-      </form>
-      
-      { Object.keys(recPortfolio).length ? (
+          ) : null }
 
-        null 
-
-      ) : null }
-
+        </div>
+      </div>
 
     </div>
   )

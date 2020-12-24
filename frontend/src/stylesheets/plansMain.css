@@ -13,6 +13,24 @@
   border: 1px solid black;
 }
 
+.label-header {
+  position: absolute;
+  width: 50vw;
+  font-size: 1.5em;
+  padding-top: 2em;
+  margin: auto;
+}
+
+.label-header span {
+  padding-left: 10vw;
+  text-decoration: underline;
+}
+
+.label-header a {
+  color: #e67a5c;
+  text-decoration: none;
+  margin-left: 12vw;
+}
 
 
 

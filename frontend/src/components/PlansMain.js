@@ -22,6 +22,10 @@ function PlansMain(props) {
 
   return (
     <div className="plans-main-div">
+      <div className="label-header">
+        <span>Select A Risk Plan</span>
+        { data.length ? <Link to="/personalize">Calculate</Link> : null }
+      </div>
       <div className="plans-main-base">
         <Portfolio 
           plans={portfolios} 
@@ -31,7 +35,6 @@ function PlansMain(props) {
         />
 
         {/* eventually some button for compare options */}
-        {/* <Link to="/personalize">Calculate</Link> */}
       </div>
       <div className="plans-main-charts">
         { data.length === 1 ? <DonutChart data={data[0]}/> : null }

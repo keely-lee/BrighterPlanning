@@ -1,0 +1,89 @@
+.personalize-main-div {
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+.personalize-main-div h1 {
+  text-align: center;
+}
+
+#risk-section-header {
+  margin: 8px 0 15px 0;
+}
+
+.personalize-div-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 90vw;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.personalize-main-div img {
+  padding-top: 10px;
+  width: 100vw;
+  height: 20vh;
+  object-fit: cover;
+  object-position: center;
+  opacity: .5;
+}
+
+
+/* left side */
+.personalize-left {
+  width: 65%;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.personalize-risk-section {
+  padding-top: 10px;
+}
+
+.recommended-plan-div {
+  border: 2px solid black;
+  padding: 10px;
+}
+
+.recommended-plan-div p {
+  margin: 0;
+}
+
+
+
+
+
+
+
+/* right side */
+.personalize-right {
+  width: 35%;
+  padding: 5px
+}
+
+
+
+
+.risk-section {
+  border: 1px solid black;
+}
+
+.risk-section > div {
+  width: fit-content;
+  padding: 15px;
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.risk-section > div div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.risk-section > div span:first-of-type {
+  padding-right: 20px;
+}
+
+
