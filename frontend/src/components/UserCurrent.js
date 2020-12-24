@@ -215,22 +215,26 @@ function UserInfo() {
         }
 
         // confirmed, best group is the best of this iteration
-        for (let i = bestIndices.length-1; i >= 0; i--) {
-          bestRec.push(offAmounts[i]);
-          offAmounts = offAmounts.slice(0, i+1).concat(offAmounts.slice(i+1));
-        }
+        if (Object.keys(sums).length) {
+          for (let i = bestIndices.length-1; i >= 0; i--) {
+            bestRec.push(offAmounts[i]);
+            offAmounts = offAmounts.slice(0, i+1).concat(offAmounts.slice(i+1));
+          }
 
-        debugger
-        bestExcessIdx -= bestIndices.length; //adjust for sliced negs
-        recTrans.push([bestRec, offAmounts[bestExcessIdx]]); //can sum for offAmounts[bestExcessIdx], but use index for QA
-        offAmounts = offAmounts.slice(0, bestExcessIdx).concat(offAmounts.slice(bestExcessIdx+1));
-        largestNeg = largestNeg - bestIndices.length;
-        posOffAmounts = offAmounts.slice(largestNeg+1);
-        negOffAmounts = offAmounts.slice(0, largestNeg+1);
-        debugger
+          debugger
+          bestExcessIdx -= bestIndices.length; //adjust for sliced negs
+          recTrans.push([bestRec, offAmounts[bestExcessIdx]]); //can sum for offAmounts[bestExcessIdx], but use index for QA
+          offAmounts = offAmounts.slice(0, bestExcessIdx).concat(offAmounts.slice(bestExcessIdx+1));
+          largestNeg = largestNeg - bestIndices.length;
+          posOffAmounts = offAmounts.slice(largestNeg+1);
+          negOffAmounts = offAmounts.slice(0, largestNeg+1);
+          debugger
+        }
       }
 
+      //quick code for posOffAmount OR negOffAmounts .length === 1
 
+      // max amount of excess combos will be limited to number of risk types (ie five)
 
 
 
