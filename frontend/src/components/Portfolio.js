@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import '../stylesheets/portfolios.css';
 
@@ -6,15 +6,17 @@ function Portfolio(props) {
   const plans = props.plans;
   const tableHeaders = plans ? Object.keys(plans[0]) : null;
 
-  // const [compare, selectCompare] = useState(false);
+
+  function selectPlan(e, plan) {
+    Array.from(e.currentTarget.parentNode.children).map(node => node.classList.remove("selected"))
+    e.currentTarget.classList.add("selected")
+    props.selectPlan(plan);
+  }
 
 
   return (
     <div className="plans-table-div">
       <h1>Explore Portfolio Plans</h1>
-
-{console.log("RENDERING IN PORTFOLIO RETURN")}
-      {/* some code in between */}
 
       { tableHeaders ? 
         <table>
@@ -26,9 +28,9 @@ function Portfolio(props) {
             {/* Consider better iterations, heavy runtime. Current priority accurate data. */}
             { plans.map((rowObject, idx) => {
               return (
-                <tr className={`plans-row-${idx}`} 
+                <tr className={`plans-row-${idx} plans-row`} 
                   key={`tr-${idx}`}
-                  onClick={() => props.selectPlan(rowObject)}>
+                  onClick={(e) => selectPlan(e, rowObject)}>
                   { tableHeaders.map((header,subIdx) => {
                     return <td key={`td-${idx}-${subIdx}`}>{rowObject[header]}</td>
                   }) }

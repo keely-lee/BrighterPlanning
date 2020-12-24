@@ -7,7 +7,7 @@ function Nav(props) {
   const [contactDropdown, toggleContactDropdown] = useState(false)
   return (
     <nav id="navbar">
-      <Link to="/"><i className="far fa-lightbulb"></i>BRIGHTER PLANNING</Link>
+      <Link to="/plans"><i className="far fa-lightbulb"></i>BRIGHTER PLANNING</Link>
       <div className="nav-contact-wrapper">
         <button type="button" 
           className="nav-contact-button"

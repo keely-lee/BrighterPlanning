@@ -7,9 +7,10 @@
 }
 
 .plans-main-base {
-  min-width: 50%;
+  min-width: 42%;
   margin: auto;
   padding-bottom: 1.5em;
+  border: 1px solid black;
 }
 
 

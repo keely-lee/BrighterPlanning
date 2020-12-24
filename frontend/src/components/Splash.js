@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Splash(props) {
+import '../stylesheets/splash.css';
+
+function Splash() {
 
   return (
-    <div>
-      <h1>HELLO FROM THE SPLASH PAGE</h1>
-      <Link to="/plans">Get Started</Link>
-      {/* PUT A FOOTER WITH PERSONAL CONTACT */}
+    <div className="splash-main-div">
+      <h1>Plan a Brighter Financial Future</h1>
+      <div id="splash-img"><Link to="/plans">Get Started Today</Link></div>
+      {/* PUT A FOOTER */}
     </div>
   )
 }

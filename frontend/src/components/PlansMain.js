@@ -20,8 +20,6 @@ function PlansMain(props) {
     dispatch(grabPortfolios())
   }, []) //dispatch on initial mount
 
-  console.log("BEEP BOOP PLANS MAIN")
-  console.log("--------")
   return (
     <div className="plans-main-div">
       <div className="plans-main-base">
@@ -33,7 +31,7 @@ function PlansMain(props) {
         />
 
         {/* eventually some button for compare options */}
-        <Link to="/personalize">Calculate</Link>
+        {/* <Link to="/personalize">Calculate</Link> */}
       </div>
       <div className="plans-main-charts">
         { data.length === 1 ? <DonutChart data={data[0]}/> : null }
