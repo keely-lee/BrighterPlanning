@@ -227,24 +227,25 @@ function UserInfo() {
       let smallestIndex;
       let amountS = {}; 
 
-      while (tooLittle.length) {
-        for (let i = tooLittle.length-1; i > 0; i--) {
+      while (tooLittle.length && smallestNumTrans >= 0) {
+        for (let i = tooLittle.length-1; i >= 0; i--) {
           const startIdx = modBSearch(tooMuch, tooLittle[i]);
           console.log("IN SIDE THE FOR LOOPS")
 
-          switch (startIdx) {
-            case -1: return; //all the lesser than amounts are smaller than the smallest larger than. split transactions needed
+          // debugger
+          // switch (startIdx) {
+          if (startIdx === -1) return smallestNumTrans = -1; //all the lesser than amounts are smaller than the smallest larger than. split transactions needed
 
-            case tooMuch[startIdx] === tooLittle[i]: //first round, optimal, least amount of transfers (matching amounts)
+          else { 
+            if (tooMuch[startIdx] === tooLittle[i]) { //first round, optimal, least amount of transfers (matching amounts)
               smallestNumTrans = 1;
               recTrans.push({[tooLittle[i]]: [tooMuch[startIdx]]})
               tooLittle = tooLittle.slice(0, i).concat(tooLittle.slice(i+1));
               tooMuch = tooMuch.slice(0, startIdx).concat(tooMuch.slice(startIdx+1));
               console.log(recTrans)
               console.log("recTrans")
-              break;
-
-            default: 
+            }
+            else {
               console.log(tooLittle)
               console.log(tooMuch)
               console.log("in default")
@@ -254,32 +255,37 @@ function UserInfo() {
               const numTrans = parseInt(Object.keys(sums)[0]);
               
               if (numTrans < smallestNumTrans || !smallestNumTrans) {
+                // debugger
                 smallestNumTrans = numTrans;
                 smallestIndex = i;
                 amountS[tooLittle[i]] = sums[Object.keys(sums)[0]].pop();
               }
+            }
 
           }
         }
 
-        if (smallestNumTrans !== 1 && smallestNumTrans) {
-          recTrans.push(amountS);
-          tooLittle = tooLittle.slice(0, smallestIndex).concat(tooLittle.slice(smallestIndex+1));
+        // debugger
+        if (smallestNumTrans > 1) {
+          const tempRec = { [tooLittle[smallestIndex]] : [] };
+          // debugger
           while (Object.values(amountS)[0].length) {
-            const tempIdx = Object.values(amountS)[0].pop();
-            tooMuch = tooMuch.slice(0, tempIdx).concat(tempIdx+1);
+            // debugger
+            const lastVals = Object.values(amountS)[0].pop();
+            tempRec[tooLittle[smallestIndex]].push(tooMuch[lastVals])
+            // const tempIdx = Object.values(amountS)[0].pop();
+            tooMuch = tooMuch.slice(0, lastVals).concat(lastVals+1);
           }
+          recTrans.push(tempRec);
+          tooLittle = tooLittle.slice(0, smallestIndex).concat(tooLittle.slice(smallestIndex+1));
         }
+
+        // debugger
+        console.log(recTrans);
+        console.log("recTrans");
 
         smallestNumTrans = 0;
       }
-
-
-
-
-
-
-
 
 
 
@@ -289,8 +295,9 @@ function UserInfo() {
 
 
       //consider approaching target by helper function that calculates least number of iterations to get there plus least number of extra elements used
-
-      console.log(recTrans);
+      // debugger
+      // console.log(recTrans);
+      // console.log("recTrans");
 
 
     }
