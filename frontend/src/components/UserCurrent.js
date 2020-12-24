@@ -202,12 +202,20 @@ function UserInfo() {
 
       //find subset of sums
       let sums = {}; //key:val => length of smallest combo: array of subarray sums 
-      function subsetSum(arr, target, partial = [], sum = 0) { //modify this later to stop when it hits more than target (sorted array)
-        if (sum < target) arr.forEach((num, i) => subsetSum(arr.slice(i + 1), target, partial.concat([num]), sum + num));
+      function subsetSum(arr, target, partial = [], sum = 0, fixIdx = 0) { //modify this later to stop when it hits more than target (sorted array)
+        // if (sum < target) arr.forEach((num, i) => subsetSum(arr.slice(i + 1), target, partial.concat([nuj]), sum + num));
+        // if (sum < target) arr.forEach((num, i) => subsetSum(arr.slice(i + 1), target, partial.concat([i]), sum + num));
+        if (sum < target) {
+          arr.forEach( (num, i) => {
+            subsetSum(arr.slice(i + 1), target, partial.concat([i + fixIdx]), sum + num, i+1)
+          })
+        }
         else if (sum === target) {
+          fixIdx = 0;
           if (sums[partial.length]) sums[partial.length].push(partial);
           else sums[partial.length] = [partial];
         }
+        else fixIdx = 0;
       }
 
       subsetSum([1,2,3,4,5,6,7], 10)
@@ -216,14 +224,17 @@ function UserInfo() {
 
 
       let smallestNumTrans = 0;
-      let amountS = []; 
+      let smallestIndex;
+      let amountS = {}; 
 
-      while(smallestNumTrans <= 2) {
+      while (tooLittle.length) {
         for (let i = tooLittle.length-1; i > 0; i--) {
           const startIdx = modBSearch(tooMuch, tooLittle[i]);
           console.log("IN SIDE THE FOR LOOPS")
+
           switch (startIdx) {
             case -1: return; //all the lesser than amounts are smaller than the smallest larger than. split transactions needed
+
             case tooMuch[startIdx] === tooLittle[i]: //first round, optimal, least amount of transfers (matching amounts)
               smallestNumTrans = 1;
               recTrans.push({[tooLittle[i]]: [tooMuch[startIdx]]})
@@ -232,29 +243,37 @@ function UserInfo() {
               console.log(recTrans)
               console.log("recTrans")
               break;
+
             default: 
-              console.log("in default")
               console.log(tooLittle)
               console.log(tooMuch)
+              console.log("in default")
+
               sums = {}; //reset sums after each iteration
               subsetSum(tooMuch.slice(0, startIdx+1), tooLittle[i]);
               const numTrans = parseInt(Object.keys(sums)[0]);
               
-              // console.log(sums)
-              // console.log("sums")
-              if (numTrans < smallestNumTrans || !smallestNumTrans || numTrans === smallestNumTrans+1) {
+              if (numTrans < smallestNumTrans || !smallestNumTrans) {
                 smallestNumTrans = numTrans;
-                // amountS = sums[Object.keys(sums)[0].pop()]
+                smallestIndex = i;
+                amountS[tooLittle[i]] = sums[Object.keys(sums)[0]].pop();
               }
 
-              break; 
-            // return; //reavluate later
           }
         }
-      }
-      // for (let i = amountS.length; i > 0; i--) {
 
-      // }
+        if (smallestNumTrans !== 1 && smallestNumTrans) {
+          recTrans.push(amountS);
+          tooLittle = tooLittle.slice(0, smallestIndex).concat(tooLittle.slice(smallestIndex+1));
+          while (Object.values(amountS)[0].length) {
+            const tempIdx = Object.values(amountS)[0].pop();
+            tooMuch = tooMuch.slice(0, tempIdx).concat(tempIdx+1);
+          }
+        }
+
+        smallestNumTrans = 0;
+      }
+
 
 
 
