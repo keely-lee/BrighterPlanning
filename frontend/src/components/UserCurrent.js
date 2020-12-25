@@ -66,11 +66,79 @@ function UserInfo() {
     else return true;
   }
 
+  // insertionSort (quicker sort for small sized array)
+  function _insertionSort (inputArr) {
+    let length = inputArr.length;
+    for (let i = 1; i < length; i++) {
+      let key = inputArr[i];
+      let j = i-1;
+      while (j >= 0 && inputArr[j] > key) {
+        inputArr[j+1] = inputArr[j];
+        j = j-1;
+      }
+      inputArr[j+1] = key;
+    }
+    return inputArr;
+  }
+
+  //find subset of sums
+  let sums = {}; //key:val => {length of smallest combo: array of subarray sums} 
+  function _subsetSum(arr, target, partial = [], sum = 0, fixIdx = 0) { 
+    if (sum < target) {
+      arr.forEach((num, i) => {
+        _subsetSum(arr.slice(i + 1), target, partial.concat([i + fixIdx]), sum + num, i+1)
+      })
+    }
+    else if (sum === target) {
+      fixIdx = 0;
+      if (sums[partial.length]) sums[partial.length].push(partial);
+      else sums[partial.length] = [partial];
+    }
+    else fixIdx = 0;
+  }
+
+  //returns matching index or index of last element less than target
+  function _modBSearch(arr, target) {
+    if (target < arr[0]) return -1; //used to avoid split transfers until necessary
+    if (target > arr[arr.length-1]) return arr.length-1;
+
+    let mid;
+    let left = 0;
+    let right = arr.length;
+    
+    while (left < right) {
+      mid = Math.floor((left + right)/2);
+      debugger
+      if (arr[mid] === target) return mid;
+      if (arr[mid] < target) left = mid+1;
+      else right = mid;
+    }
+
+    return -1;  //temporary fix until modbsearch fixed. target not in array
+    // return mid;
+  } 
+
+  // FIX THIS LATER TO A BETTER SEARCH
+  function _findLargestNeg(arr) {
+    let left = 0;
+    let right = arr.length-1;
+    let mid;
+
+    while (left < right) {
+      mid = Math.floor((left + right)/2);
+
+      if (arr[mid] < 0 && arr[mid+1] > 0) return mid;
+      if (arr[mid] > 0) right = mid;
+      else if (arr[mid] < 0 && arr[mid+1] < 0) left = mid;
+    }
+  }
+
   function calculate(e) {
     e.preventDefault();
     if (confirmValid()) {
       // Research accounting concepts
 
+      //Establish recommended portfolio based on user input
       const total = Object.values(userPortfolio).reduce((subTotal, float) => {
         if (float) return subTotal + parseFloat(float);
         else return subTotal;
@@ -88,92 +156,33 @@ function UserInfo() {
       let offAmounts = []; //To be sorted array of all amounts needed and excess
       let largestNeg; //To be largest negative value (for quicker slicing & stop points)
 
+      // Determine "off amounts". Set values to amounts short/in excess and log accounts
       headers.forEach(ctg => {
         makeRecPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
-
         if (makeRecPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
 
         if (makeRecPortfolio[ctg] > userPortfolio[ctg]) {
           const setNumber = Math.round((makeRecPortfolio[ctg] - userPortfolio[ctg] + Number.EPSILON) * 100) / 100;
           if (lessThanRec[setNumber]) lessThanRec[setNumber].push(ctg);
           else lessThanRec[setNumber] = [ctg];
-
           offAmounts.push(setNumber * -1); 
         }
-
         else {
           const setNumber = Math.round((userPortfolio[ctg] - makeRecPortfolio[ctg] + Number.EPSILON) * 100) / 100;
           if (moreThanRec[setNumber]) moreThanRec[setNumber].push(ctg);
           else moreThanRec[setNumber] = [ctg];
           offAmounts.push(setNumber);
         }
-
       })
-
       setRecPortfolio(makeRecPortfolio);
 
-      if (!Object.keys(moreThanRec).length) return; //no transfers needed - portfolio matches recommended plan
-
-
-      // insertionSort (quicker sort for small sized array)
-      function _insertionSort (inputArr) {
-        let length = inputArr.length;
-        for (let i = 1; i < length; i++) {
-          let key = inputArr[i];
-          let j = i-1;
-          while (j >= 0 && inputArr[j] > key) {
-            inputArr[j+1] = inputArr[j];
-            j = j-1;
-          }
-          inputArr[j+1] = key;
-        }
-        return inputArr;
-      }
-
-      //returns matching index or index of last element less than target
-      function _modBSearch(arr, target) {
-        if (target < arr[0]) return -1; //used to avoid split transfers until necessary
-        if (target > arr[arr.length-1]) return arr.length-1;
-
-        let mid;
-        let left = 0;
-        let right = arr.length;
-        
-
-        while (left < right) {
-          mid = Math.floor((left + right)/2);
-          if (arr[mid] === target) return mid;
-          if (arr[mid] < target) left = mid;
-          else right = mid-1;
-        }
-
-        //NEED TO FIX THIS
-        if (target === 0) {
-          if (arr[mid] > 0) return mid-1;
-        }
-
-        return mid;
-      } 
+      if (!Object.keys(moreThanRec).length) return setRecTransfers(["No transfers needed, your portfolio is optimal!"]); //no transfers needed - portfolio matches recommended plan
 
       _insertionSort(offAmounts); //sort off amounts
-      largestNeg = _modBSearch(offAmounts, 0); //initial declaration of largest negative
+      largestNeg = _findLargestNeg(offAmounts); //initial declaration of largest negative
+      // largestNeg = _modBSearch(offAmounts, 0); //initial declaration of largest negative
 
-      //find subset of sums
-      let sums = {}; //key:val => {length of smallest combo: array of subarray sums} 
-      function _subsetSum(arr, target, partial = [], sum = 0, fixIdx = 0) { 
-        if (sum < target) {
-          arr.forEach((num, i) => {
-            _subsetSum(arr.slice(i + 1), target, partial.concat([i + fixIdx]), sum + num, i+1)
-          })
-        }
-        else if (sum === target) {
-          fixIdx = 0;
-          if (sums[partial.length]) sums[partial.length].push(partial);
-          else sums[partial.length] = [partial];
-        }
-        else fixIdx = 0;
-      }
-
+      // debugger
 
       let posOffAmounts = offAmounts.slice(largestNeg+1); //avoid constant slicing if unnecessary
       let negOffAmounts = offAmounts.slice(0, largestNeg+1);
@@ -183,6 +192,7 @@ function UserInfo() {
         const current = Math.abs(offAmounts[i]);
         const matchIndex = _modBSearch(posOffAmounts, current) + largestNeg + 1;
 
+        debugger
         //NEED TO FIX MODBSEARCH
         if (i === matchIndex) continue;
 
@@ -201,9 +211,9 @@ function UserInfo() {
       let firstIteration = true;
       while ((Object.keys(sums).length || firstIteration) && offAmounts.length > 0) {
         firstIteration = false;
+        debugger
 
         if (posOffAmounts.length === 1 || negOffAmounts.length === 1) {
-          debugger
             if (negOffAmounts.length === 1) {
               recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
             } else {
@@ -257,21 +267,17 @@ function UserInfo() {
       recTrans.forEach(subArr => {
         let owed = subArr[0];
         let excess = subArr[1];
-        debugger
         if (!(owed instanceof Array) && !(excess instanceof Array)) {
-          debugger
           recommendText.push(`Transfer $${owed} from ${moreThanRec[excess].pop()} ${lessThanRec[owed].pop()}.`)
         }
         else if (owed instanceof Array && !(excess instanceof Array)) {
           const singleAcct = moreThanRec[excess].pop();
-          debugger
           owed.forEach(oweAmt => {
             recommendText.push(`Transfer $${oweAmt} from ${singleAcct} to ${lessThanRec[oweAmt].pop()}.`);
           })
         }
         else if (!(owed instanceof Array) && excess instanceof Array) {
           const singleAcct = lessThanRec[owed].pop();
-          debugger
           excess.forEach(excessAmt => {
             recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
           })
@@ -288,7 +294,7 @@ function UserInfo() {
     
     
     <div className="personalize-main-div">
-      {/* <img src="../images/user-current-img.jpg" alt="personalize" draggable="false"/> */}
+      <div className="user-img"></div>
 
       <h1>Personalize Your Portfolio</h1>
 
@@ -311,8 +317,8 @@ function UserInfo() {
           { recTransfers.length ? (
             <div className="recommended-trans-div">
               <h3>Recommended Transfers: </h3>
-              { recTransfers.map(text => (
-                  <p>- {text}</p>
+              { recTransfers.map((text, idx) => (
+                  <p key={`text-${idx}`}>- {text}</p>
               ))}
             </div>
           ) : null }
