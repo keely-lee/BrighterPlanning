@@ -109,9 +109,6 @@ function UserInfo() {
         }
 
       })
-      console.log(lessThanRec)
-      console.log(moreThanRec)
-      console.log(`less, more`)
 
       setRecPortfolio(makeRecPortfolio);
 
@@ -281,13 +278,10 @@ function UserInfo() {
         }
       })
 
-      console.log(recommendText)
       setRecTransfers(recommendText);
-      console.log(recTrans)
-      console.log("recTrans")
 
     }
-    else console.log("FULL OF ERRORS")
+    else console.log("Review Errors")
   }
 
   return (
