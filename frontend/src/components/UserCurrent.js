@@ -288,7 +288,7 @@ function UserInfo() {
     
     
     <div className="personalize-main-div">
-      {/* <img src="../images/user-current-img.jpg" alt="personalize" draggable="false"/> */}
+      <div className="user-img"></div>
 
       <h1>Personalize Your Portfolio</h1>
 

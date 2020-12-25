@@ -6,7 +6,6 @@ function Portfolio(props) {
   const plans = props.plans;
   const tableHeaders = plans ? Object.keys(plans[0]) : null;
 
-
   function selectPlan(e, plan) {
     Array.from(e.currentTarget.parentNode.children).map(node => node.classList.remove("selected"))
     e.currentTarget.classList.add("selected")
