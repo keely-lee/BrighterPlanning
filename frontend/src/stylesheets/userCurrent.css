@@ -1,6 +1,7 @@
 .personalize-main-div {
   margin-left: auto; 
   margin-right: auto;
+  height: 87vh;
 }
 
 .personalize-main-div h1 {
@@ -23,7 +24,7 @@
 .personalize-main-div img {
   padding-top: 10px;
   width: 100vw;
-  height: 20vh;
+  height: 15vh;
   object-fit: cover;
   object-position: center;
   opacity: .5;
@@ -36,19 +37,56 @@
   padding: 5px;
   display: flex;
   flex-direction: row;
+  /* justify-content: space-between; */
 }
+
 
 .personalize-risk-section {
   padding-top: 10px;
+  padding-right: 20px;
 }
+
+.personalize-risk-section button {
+  margin-top: 10px;
+}
+
+.personalize-input-div {
+  padding: 5px;
+}
+
+.personalize-input-div label {
+  padding-right: 15px;
+}
+
+.fa-arrow-up, .fa-arrow-down {
+  font-size: .8em;
+  margin-left: 10px;
+}
+
+.rec-green {
+  color: green;
+}
+
+.rec-red {
+  color: red;
+}
+
+
+
+
 
 .recommended-plan-div {
   border: 2px solid black;
   padding: 10px;
+  /* height: 45vh; */
+  /* width: 40%; */
 }
 
-.recommended-plan-div p {
+.recommended-plan-div div {
   margin: 0;
+  padding: 6px;
+  display: flex;
+  justify-content: space-between;
 }
 
 
@@ -68,6 +106,10 @@
 
 .risk-section {
   border: 1px solid black;
+  position: absolute;
+  top: 35vh;
+  right: 5vw;
+  /* width: auto; */
 }
 
 .risk-section > div {

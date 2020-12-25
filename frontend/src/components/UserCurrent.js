@@ -61,6 +61,7 @@ function UserInfo() {
 
   function confirmValid() {
     // confirm no errors, confirm at least one entry entered
+    // debugger
     if (Object.keys(inputErrors).length || !Object.values(userPortfolio).some(ele => ele)) return false;
     else return true;
   }
@@ -75,7 +76,7 @@ function UserInfo() {
         else return subTotal;
       }, 0.0)
 
-      const recPortfolio = {};
+      const makeRecPortfolio = {};
       const recTrans = []; //Array of subarrays. 
         //First element of subarray = amount needed from fund(s); if int, matching subset of excess accounts; if array, partial transfers needed. 
         //Second element of subarray = excess amts; if int, matching subset of below value accts; if array, partial transfers needed.
@@ -88,11 +89,12 @@ function UserInfo() {
       let largestNeg; //To be largest negative value (for quicker slicing & stop points)
 
       headers.forEach(ctg => {
-        recPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
-        if (recPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
+        makeRecPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
 
-        if (recPortfolio[ctg] > userPortfolio[ctg]) {
-          const setNumber = Math.round((recPortfolio[ctg] - userPortfolio[ctg] + Number.EPSILON) * 100) / 100;
+        if (makeRecPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
+
+        if (makeRecPortfolio[ctg] > userPortfolio[ctg]) {
+          const setNumber = Math.round((makeRecPortfolio[ctg] - userPortfolio[ctg] + Number.EPSILON) * 100) / 100;
           if (lessThanRec[setNumber]) lessThanRec[setNumber].push(ctg);
           else lessThanRec[setNumber] = [ctg];
 
@@ -100,10 +102,9 @@ function UserInfo() {
         }
 
         else {
-          const setNumber = Math.round((userPortfolio[ctg] - recPortfolio[ctg] + Number.EPSILON) * 100) / 100;
+          const setNumber = Math.round((userPortfolio[ctg] - makeRecPortfolio[ctg] + Number.EPSILON) * 100) / 100;
           if (moreThanRec[setNumber]) moreThanRec[setNumber].push(ctg);
           else moreThanRec[setNumber] = [ctg];
-
           offAmounts.push(setNumber);
         }
 
@@ -112,7 +113,7 @@ function UserInfo() {
       console.log(moreThanRec)
       console.log(`less, more`)
 
-      setRecPortfolio(recPortfolio);
+      setRecPortfolio(makeRecPortfolio);
 
       if (!Object.keys(moreThanRec).length) return; //no transfers needed - portfolio matches recommended plan
 
@@ -141,12 +142,17 @@ function UserInfo() {
         let left = 0;
         let right = arr.length;
         
+
         while (left < right) {
           mid = Math.floor((left + right)/2);
-
           if (arr[mid] === target) return mid;
-          if (arr[mid] > target) right = mid;
-          else left = mid+1;
+          if (arr[mid] < target) left = mid;
+          else right = mid-1;
+        }
+
+        //NEED TO FIX THIS
+        if (target === 0) {
+          if (arr[mid] > 0) return mid-1;
         }
 
         return mid;
@@ -172,9 +178,6 @@ function UserInfo() {
       }
 
 
-      // offAmounts = [-30, -15, -15, -5, 5, 10, 15, 15, 20]
-      // largestNeg = _modBSearch(offAmounts,0)
-
       let posOffAmounts = offAmounts.slice(largestNeg+1); //avoid constant slicing if unnecessary
       let negOffAmounts = offAmounts.slice(0, largestNeg+1);
       
@@ -182,11 +185,16 @@ function UserInfo() {
       for (let i = 0; i <= largestNeg; i++) {
         const current = Math.abs(offAmounts[i]);
         const matchIndex = _modBSearch(posOffAmounts, current) + largestNeg + 1;
+
+        //NEED TO FIX MODBSEARCH
+        if (i === matchIndex) continue;
+
         if (current === offAmounts[matchIndex]) {
           recTrans.push([current, offAmounts[matchIndex]]);
           offAmounts = offAmounts.slice(0, i).concat(offAmounts.slice(i+1, matchIndex)).concat(offAmounts.slice(matchIndex+1)); 
           //adjust for element being removed
           largestNeg = largestNeg - 1; 
+          negOffAmounts = offAmounts.slice(0, largestNeg+1);
           posOffAmounts = offAmounts.slice(largestNeg+1)
           i--; 
         }
@@ -194,14 +202,15 @@ function UserInfo() {
 
       // next grab any owed combo with singular excess
       let firstIteration = true;
-      while ((Object.keys(sums).length || firstIteration) && Object.keys(offAmounts).length) {
+      while ((Object.keys(sums).length || firstIteration) && offAmounts.length > 0) {
         firstIteration = false;
 
         if (posOffAmounts.length === 1 || negOffAmounts.length === 1) {
+          debugger
             if (negOffAmounts.length === 1) {
-              return recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
+              recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
             } else {
-               return recTrans.push(negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]);
+              recTrans.push(negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]);
             }
         }
 
@@ -246,6 +255,34 @@ function UserInfo() {
       // max amount of excess combos will be limited to number of risk types (ie five)
       // bestNumCombos = 2; bestNumCombos++ each iteration until reaching pos/neg length
 
+      //transfer to text values
+      let recommendText = [];
+      recTrans.forEach(subArr => {
+        let owed = subArr[0];
+        let excess = subArr[1];
+        debugger
+        if (!(owed instanceof Array) && !(excess instanceof Array)) {
+          debugger
+          recommendText.push(`Transfer $${owed} from ${moreThanRec[excess].pop()} ${lessThanRec[owed].pop()}.`)
+        }
+        else if (owed instanceof Array && !(excess instanceof Array)) {
+          const singleAcct = moreThanRec[excess].pop();
+          debugger
+          owed.forEach(oweAmt => {
+            recommendText.push(`Transfer $${oweAmt} from ${singleAcct} to ${lessThanRec[oweAmt].pop()}.`);
+          })
+        }
+        else if (!(owed instanceof Array) && excess instanceof Array) {
+          const singleAcct = lessThanRec[owed].pop();
+          debugger
+          excess.forEach(excessAmt => {
+            recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
+          })
+        }
+      })
+
+      console.log(recommendText)
+      setRecTransfers(recommendText);
       console.log(recTrans)
       console.log("recTrans")
 
@@ -254,9 +291,10 @@ function UserInfo() {
   }
 
   return (
+    
+    
     <div className="personalize-main-div">
-      <img src="https://pixabay.com/get/54e0dd424b54a414f6da8c7dda3536781537d6e15555774a_1280.jpg"/>
-      {/* <img src="https://pixabay.com/get/55e7d6424950ac14f6d1867dda3536781537d6e155567841_1920.jpg"/> */}
+      {/* <img src="../images/user-current-img.jpg" alt="personalize" draggable="false"/> */}
 
       <h1>Personalize Your Portfolio</h1>
 
@@ -275,6 +313,15 @@ function UserInfo() {
               </div>
             ) : <Link to="/plans">Choose a plan that's right for you!</Link> }
           </section>
+
+          { recTransfers.length ? (
+            <div className="recommended-trans-div">
+              <h3>Recommended Transfers: </h3>
+              { recTransfers.map(text => (
+                  <p>- {text}</p>
+              ))}
+            </div>
+          ) : null }
         </div>
 
         <div className="personalize-left">
@@ -282,18 +329,26 @@ function UserInfo() {
             <h3>Tell us about your current portfolio: </h3>
             <form onSubmit={calculate}>
               { headers.map(ctg => {
+                let recDiff;
+                let color; 
+                let arrow; 
+                if (Object.keys(recPortfolio).length) {
+                  recDiff = (recPortfolio[ctg] - userPortfolio[ctg]) ? recPortfolio[ctg] - userPortfolio[ctg] : null;
+                  color = recDiff > 0 ? "green" : "red";
+                  arrow = recDiff > 0 ? <i className="fas fa-arrow-up"></i> : <i className="fas fa-arrow-down"></i>;
+                }
                 return (
-                  <div key={ctg}>
+                  <div key={ctg} className={`${ctg}-div personalize-input-div`}>
                     <label htmlFor={ctg}>{ctg}</label>
                     <input type="text"
                       onChange={updateAmount(ctg)}
-                      className={`input-${ctg}`} 
                     />
+                    { recDiff || recDiff === 0 ? <span className={`rec-${color}`}>{arrow} $ {Math.abs(recDiff).toFixed(2)}</span> : null }
                   </div>
                 )
               }) }
 
-              <button>Plan Bright!</button>
+              <button>Calculate My Plan!</button>
             </form>
             
           </div>
@@ -301,7 +356,14 @@ function UserInfo() {
 
             <div className="recommended-plan-div">
               <h3>Recommended Plan</h3>
-              {headers.map((ctg, idx) => (<p key={`${ctg}-${idx}`}>$ {recPortfolio[ctg]}</p>))}
+              {headers.map((ctg, idx) => {
+                return (
+                  <div key={`${ctg}-${idx}`}>
+                    <span>{ctg}:</span>
+                    <span>$ {recPortfolio[ctg]}</span>
+                  </div>
+                )
+              })}
             </div>
 
           ) : null }

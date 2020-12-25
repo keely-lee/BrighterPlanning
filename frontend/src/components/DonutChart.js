@@ -57,7 +57,6 @@ function DonutChart(props) {
   return (
     // categories
     <div className="donut-chart-div">
-      {console.log("RAWR DONUTSSS")}
       { data ? 
         <HighchartsReact highcharts={Highcharts} options={options} />
       : null }

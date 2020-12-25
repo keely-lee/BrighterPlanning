@@ -12,7 +12,7 @@
 .splash-main-div h1 { display: none }
 
 #splash-img {
-  background-image: url("https://pixabay.com/get/52e3d5424e55a514f6d1867dda3536781537d6e653587149_1920.jpg");
+  background-image: url("../images/splash-img.jpg");
   background-size: cover;
   width: 100vw;
   height: 88vh;
