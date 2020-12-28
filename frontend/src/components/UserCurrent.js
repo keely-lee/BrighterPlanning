@@ -108,7 +108,6 @@ function UserInfo() {
     
     while (left < right) {
       mid = Math.floor((left + right)/2);
-      debugger
       if (arr[mid] === target) return mid;
       if (arr[mid] < target) left = mid+1;
       else right = mid;
@@ -190,7 +189,6 @@ function UserInfo() {
         const current = Math.abs(offAmounts[i]);
         const matchIndex = _modBSearch(posOffAmounts, current) + largestNeg + 1;
 
-        debugger
         //NEED TO FIX MODBSEARCH
         if (i === matchIndex) continue;
 
@@ -209,13 +207,16 @@ function UserInfo() {
       let firstIteration = true;
       while ((Object.keys(sums).length || firstIteration) && offAmounts.length > 0) {
         firstIteration = false;
-        debugger
 
         if (posOffAmounts.length === 1 || negOffAmounts.length === 1) {
             if (negOffAmounts.length === 1) {
               recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
+              break;
             } else {
-              recTrans.push(negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]);
+              // negOffAmounts = negOffAmounts.map(amt => Math.abs(amt));
+              // recTrans.push([negOffAmounts, posOffAmounts[0]]);
+              recTrans.push([negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]]);
+              break;
             }
         }
 
@@ -265,7 +266,6 @@ function UserInfo() {
       recTrans.forEach(subArr => {
         let owed = subArr[0];
         let excess = subArr[1];
-        debugger
         if (!(owed instanceof Array) && !(excess instanceof Array)) {
           recommendText.push(`Transfer $${owed} from ${moreThanRec[excess].pop()} ${lessThanRec[owed].pop()}.`)
         }
