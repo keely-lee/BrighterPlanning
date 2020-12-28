@@ -108,7 +108,6 @@ function UserInfo() {
     
     while (left < right) {
       mid = Math.floor((left + right)/2);
-      debugger
       if (arr[mid] === target) return mid;
       if (arr[mid] < target) left = mid+1;
       else right = mid;
@@ -156,7 +155,7 @@ function UserInfo() {
       let offAmounts = []; //To be sorted array of all amounts needed and excess
       let largestNeg; //To be largest negative value (for quicker slicing & stop points)
 
-      // Determine "off amounts". Set values to amounts short/in excess and log accounts
+      // Determine "offAmounts". Set values to amounts short/in excess and log accounts
       headers.forEach(ctg => {
         makeRecPortfolio[ctg] = Math.round(((parseInt(currPlan[ctg])/100 * total) + Number.EPSILON) * 100) / 100; //review this calculation for simplification
         if (makeRecPortfolio[ctg] === userPortfolio[ctg]) return; //no transfers needed
@@ -182,8 +181,6 @@ function UserInfo() {
       largestNeg = _findLargestNeg(offAmounts); //initial declaration of largest negative
       // largestNeg = _modBSearch(offAmounts, 0); //initial declaration of largest negative
 
-      // debugger
-
       let posOffAmounts = offAmounts.slice(largestNeg+1); //avoid constant slicing if unnecessary
       let negOffAmounts = offAmounts.slice(0, largestNeg+1);
       
@@ -192,14 +189,12 @@ function UserInfo() {
         const current = Math.abs(offAmounts[i]);
         const matchIndex = _modBSearch(posOffAmounts, current) + largestNeg + 1;
 
-        debugger
         //NEED TO FIX MODBSEARCH
         if (i === matchIndex) continue;
 
         if (current === offAmounts[matchIndex]) {
           recTrans.push([current, offAmounts[matchIndex]]);
-          offAmounts = offAmounts.slice(0, i).concat(offAmounts.slice(i+1, matchIndex)).concat(offAmounts.slice(matchIndex+1)); 
-          //adjust for element being removed
+          offAmounts = offAmounts.slice(0, i).concat(offAmounts.slice(i+1, matchIndex)).concat(offAmounts.slice(matchIndex+1)); //adjust for element being removed
           largestNeg = largestNeg - 1; 
           negOffAmounts = offAmounts.slice(0, largestNeg+1);
           posOffAmounts = offAmounts.slice(largestNeg+1)
@@ -211,15 +206,18 @@ function UserInfo() {
       let firstIteration = true;
       while ((Object.keys(sums).length || firstIteration) && offAmounts.length > 0) {
         firstIteration = false;
-        debugger
 
+        //if one lessThan acct or one moreThan acct
         if (posOffAmounts.length === 1 || negOffAmounts.length === 1) {
             if (negOffAmounts.length === 1) {
               recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
+              break;
             } else {
-              recTrans.push(negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]);
+              recTrans.push([negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]]);
+              break;
             }
         }
+
 
         let bestNum = posOffAmounts.length;
         let bestRec = [];
@@ -237,38 +235,39 @@ function UserInfo() {
             bestExcessIdx = i;
             bestIndices = sums[cost].pop(); 
           }
-
         }
 
         // confirmed, best group is the best of this iteration
-        if (Object.keys(sums).length) {
+        if (Object.keys(sums).length) { 
           for (let i = bestIndices.length-1; i >= 0; i--) {
             bestRec.push(offAmounts[i]);
             offAmounts = offAmounts.slice(0, i+1).concat(offAmounts.slice(i+1));
           }
 
-          debugger
+          // debugger
           bestExcessIdx -= bestIndices.length; //adjust for sliced negs
           recTrans.push([bestRec, offAmounts[bestExcessIdx]]); //can sum for offAmounts[bestExcessIdx], but use index for QA
           offAmounts = offAmounts.slice(0, bestExcessIdx).concat(offAmounts.slice(bestExcessIdx+1));
           largestNeg = largestNeg - bestIndices.length;
           posOffAmounts = offAmounts.slice(largestNeg+1);
           negOffAmounts = offAmounts.slice(0, largestNeg+1);
-          debugger 
+          // debugger 
         }
       }
 
 
       // max amount of excess combos will be limited to number of risk types (ie five)
       // bestNumCombos = 2; bestNumCombos++ each iteration until reaching pos/neg length
+      // permutations of sums (which sum of excess === sum of lessThan)
 
+      
       //transfer to text values
       let recommendText = [];
       recTrans.forEach(subArr => {
         let owed = subArr[0];
         let excess = subArr[1];
         if (!(owed instanceof Array) && !(excess instanceof Array)) {
-          recommendText.push(`Transfer $${owed} from ${moreThanRec[excess].pop()} ${lessThanRec[owed].pop()}.`)
+          recommendText.push(`Transfer $${owed} from ${moreThanRec[excess].pop()} to ${lessThanRec[owed].pop()}.`)
         }
         else if (owed instanceof Array && !(excess instanceof Array)) {
           const singleAcct = moreThanRec[excess].pop();
@@ -281,6 +280,9 @@ function UserInfo() {
           excess.forEach(excessAmt => {
             recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
           })
+        }
+        else { //both arrays
+
         }
       })
 
