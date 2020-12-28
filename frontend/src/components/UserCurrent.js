@@ -182,8 +182,6 @@ function UserInfo() {
       largestNeg = _findLargestNeg(offAmounts); //initial declaration of largest negative
       // largestNeg = _modBSearch(offAmounts, 0); //initial declaration of largest negative
 
-      // debugger
-
       let posOffAmounts = offAmounts.slice(largestNeg+1); //avoid constant slicing if unnecessary
       let negOffAmounts = offAmounts.slice(0, largestNeg+1);
       
@@ -267,6 +265,7 @@ function UserInfo() {
       recTrans.forEach(subArr => {
         let owed = subArr[0];
         let excess = subArr[1];
+        debugger
         if (!(owed instanceof Array) && !(excess instanceof Array)) {
           recommendText.push(`Transfer $${owed} from ${moreThanRec[excess].pop()} ${lessThanRec[owed].pop()}.`)
         }
