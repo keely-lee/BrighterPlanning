@@ -281,7 +281,7 @@ function UserInfo() {
             recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
           })
         }
-        else { //both arrays
+        else { //both arrays 
 
         }
       })
