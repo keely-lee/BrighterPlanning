@@ -5,6 +5,12 @@
     #navbar {
       width: 96vw;
       padding: 2vh 2vw;
+      position: -webkit-sticky;
+      position: sticky;
+        /* position: -webkit-sticky;
+        position: -moz-sticky;
+        position: -ms-sticky;
+        position: -o-sticky; */
     }
 
     #navbar a:first-child { font-size: 1.1em }
@@ -13,10 +19,71 @@
     #splash-img a { font-size: 2.2em }
 
   /* Plans Main */
-    
+    .plans-main-div {
+      max-width: 90vw;
+    }
+
+    .plans-main-base {
+      padding-bottom: 1em;
+    }
+
+    .plans-table-div h1 {
+      font-size: 1.4em;
+    }
+
+    .plans-table-div {
+      font-size: .8em;
+    }
+
+    .label-header {
+      padding-top: .5em;
+      font-size: 1.2em;
+    }
+
   
 
 }  
+
+@media only screen 
+  /* and (min-height: ) */
+  and (max-width: 415px) {   /* Phone + portrait */
+
+    /* Plains Main */
+      .label-header { 
+        position: static;
+        padding: 1em 0;
+        font-size: 1.1em;
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .label-header span { padding: 0 }
+      .label-header a { margin: 0 }
+
+      .plans-main-div {
+        display: block;
+      }
+
+      .plans-table-div { font-size: .7em }
+
+
+
+      .plans-main-charts {
+        margin: 1em 0;
+        padding-top: .4em;
+        border-top: 1px dashed black;
+      }
+
+      .plans-main-charts > div tspan {
+        font-size: 1.15em;
+      }
+
+      /* .plans-main-charts > div .highcharts-series-group {
+        top: 10px;
+      } */
+
+}
 
 
 
