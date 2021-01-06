@@ -1,0 +1,31 @@
+/* Phone */
+@media only screen and (max-width: 750px) {
+  
+  /* nav */
+    #navbar {
+      width: 96vw;
+      padding: 2vh 2vw;
+    }
+
+    #navbar a:first-child { font-size: 1.1em }
+
+  /* splash */
+    #splash-img a { font-size: 2.2em }
+
+  /* Plans Main */
+    
+  
+
+}  
+
+
+
+
+/* Tablet */
+
+
+
+
+
+
+/* Computer sizes */

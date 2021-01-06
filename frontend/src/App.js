@@ -6,6 +6,8 @@ import Splash from './components/Splash.js';
 import PlansMain from './components/PlansMain';
 import UserCurrent from './components/UserCurrent';
 
+import './stylesheets/mobile.css';
+
 function App() {
   return (
     <div>
