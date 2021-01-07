@@ -13,10 +13,11 @@ function DonutChart(props) {
 
   const options = data ? {
     chart: {
-      type: 'pie'
+      type: 'pie',
+      renderTo: 'container',
     },
     title: {
-      text: `Risk Plan ${data ? data['Risk'] : ""}`
+      text: `Risk Plan ${data ? data['Risk'] : ""}`,
     },
     plotOptions: {
       pie: {
@@ -32,8 +33,10 @@ function DonutChart(props) {
             property: 'percentage',
             operator: '>',
             value: 1
-          }
-        }
+          },
+        },
+        size: '85%',
+        center: ['50%', '40%'],
       }
     },
     // yAxis: {
@@ -51,6 +54,9 @@ function DonutChart(props) {
     tooltip: {
       headerFormat: '<b>{point.plan}</b>',
       pointFormat: '<b>{point.percentage}%</b>'
+    },
+    credits: {
+      enabled: false
     }
   } : null;
 
@@ -61,7 +67,7 @@ function DonutChart(props) {
         <HighchartsReact 
           highcharts={Highcharts} 
           options={options}      
-          // containerProps={{style: {height: '87vh', width: '50vw'} }}
+          containerProps={{style: {height: '100%',} }} // width: '50vw'} }}
         />
       : null }
     </div>

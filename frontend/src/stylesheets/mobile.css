@@ -69,9 +69,7 @@
         /* width: 100% !important; */
       }
 
-      .plans-main-charts > div tspan {
-        font-size: 1.15em;
-      }
+      .plans-main-charts > div tspan { font-size: 1.15em }
 
       /* .plans-main-charts > div .highcharts-series-group {
         top: 10px;
@@ -86,15 +84,16 @@
     .plans-split {
       font-size: .9em;
       width: 50%;
-      color: green;
     }
 
     .plans-main-charts {
-      max-width: 50%;
+      max-width: 48%;
+      height: fit-content;
+      overflow: hidden;
     }
 
     .label-header {
-      width: 45%;
+      width: 50%;
       display: flex;
       justify-content: space-between;
     }
@@ -102,9 +101,8 @@
     .label-header span { padding-left: 0 }
     .label-header a { margin-left: 0 }
 
-    .donut-chart-div {
-      height: 85vh;
-    }
+    .donut-chart-div { height: 80vh }
+    .plans-main-charts > div tspan { font-size: 1.15em }
 
   }
 

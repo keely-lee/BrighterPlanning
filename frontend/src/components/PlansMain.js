@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Highcharts from 'highcharts';
 
 import Portfolio from './Portfolio';
 import DonutChart from './DonutChart';
@@ -19,9 +20,13 @@ function PlansMain(props) {
 
   useEffect(() => {
     dispatch(grabPortfolios())
-    // const donut = document.getElementsByClassName('donut-chart-div')[0].highcharts();
-    // donut.reflow();
   }, []) //dispatch on initial mount
+
+  useEffect(() => {
+    console.log("second effect")
+    const donut = data.length === 1 ? Highcharts.charts[0] : "";
+    if (donut) donut.reflow();
+  }, [data.length])
 
   return (
     <div className="plans-main-div">
