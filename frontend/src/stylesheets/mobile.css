@@ -34,6 +34,12 @@
       font-size: 1.2em;
     }
 
+  /* User Main */
+    .personalize-main-div h1 { font-size: 1.5em }
+    .personalize-div-wrapper { font-size: .8em }
+
+    .personalize-left input { width: 5em }
+
 
 }  
 
@@ -75,11 +81,56 @@
         top: 10px;
       } */
 
+
+    /* User Main */
+
+      /* LEFT SIDE */
+      .personalize-left { flex-direction: column }
+
+      [class*='-input-div'] {
+        padding: 0;
+        margin: 5px;
+      }
+
+      .personalize-risk-section { padding: 5px }
+
+      .personalize-left h3 { 
+        margin: 0;
+        margin-bottom: .8em;
+      }
+
+      .recommended-plan-div { 
+        margin-top: 2em;
+        padding: 5px;
+        width: fit-content; 
+      }
+
+      .recommended-plan-div > div { 
+        padding: 0;
+        margin: 5px;
+      }
+
+      /* RIGHT SIDE */
+      .personalize-right {
+        flex-direction: column;
+      }
+      .risk-section > div:first-of-type { padding: 10px; }
+      
+      .risk-section { margin: auto 0 }
+
+      .recommended-trans-div {
+        width: 140%;
+        position: relative;
+        top: 1em;
+        left: -5em;
+      }
+
 }
 
 @media only screen
   and (min-width: 475px)
   and (max-height: 415px) { /* Phone + landscape */
+
 
     .plans-split {
       font-size: .9em;

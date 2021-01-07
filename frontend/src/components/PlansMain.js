@@ -19,7 +19,9 @@ function PlansMain(props) {
   const donutPresent = data.length === 1 ? "plans-split" : "";
 
   useEffect(() => {
-    dispatch(grabPortfolios())
+    dispatch(grabPortfolios());
+
+    console.log("first effect")
   }, []) //dispatch on initial mount
 
   useEffect(() => {
@@ -27,6 +29,12 @@ function PlansMain(props) {
     const donut = data.length === 1 ? Highcharts.charts[0] : "";
     if (donut) donut.reflow();
   }, [data.length])
+
+  // useEffect(() => {
+  //   console.log("third effect")
+  //   const donut = data.length === 1 ? Highcharts.charts[0] : "";
+  //   if (donut) donut.reflow();
+  // }, [Object.keys(portfolios)]) //temporary
 
   return (
     <div className="plans-main-div">
