@@ -132,6 +132,39 @@ function UserInfo() {
     }
   }
 
+  let pSums = {}; //key:value => sum: [elements added to make sum]. length == val.length 
+  function _permSums(arr, length, sub = [], curr = 0) { //find all permutations of sums from length num elements
+    if (sub.length === length) return sub;
+    let temp = [];
+
+    for (let i = curr+1; i < arr.length; i++) {
+      temp.push(arr[curr] + arr[i]);
+    }
+
+
+  }
+
+
+      const permutator = (inputArr) => {
+        let result = [];
+
+        const permute = (arr, m = []) => {
+          if (arr.length === 0) {
+            result.push(m)
+          } else {
+            for (let i = 0; i < arr.length; i++) {
+              let curr = arr.slice();
+              let next = curr.splice(i, 1);
+              permute(curr.slice(), m.concat(next))
+            }
+          }
+        }
+
+        permute(inputArr)
+        return result;
+      }
+
+
   function calculate(e) {
     e.preventDefault();
     if (confirmValid()) {
@@ -219,7 +252,7 @@ function UserInfo() {
         }
 
 
-        let bestNum = posOffAmounts.length;
+        let bestNum = negOffAmounts.length;
         let bestRec = [];
         let bestExcessIdx = offAmounts.length-1;
         let bestIndices = []; //for slicing
@@ -244,23 +277,29 @@ function UserInfo() {
             offAmounts = offAmounts.slice(0, i+1).concat(offAmounts.slice(i+1));
           }
 
-          // debugger
           bestExcessIdx -= bestIndices.length; //adjust for sliced negs
           recTrans.push([bestRec, offAmounts[bestExcessIdx]]); //can sum for offAmounts[bestExcessIdx], but use index for QA
           offAmounts = offAmounts.slice(0, bestExcessIdx).concat(offAmounts.slice(bestExcessIdx+1));
           largestNeg = largestNeg - bestIndices.length;
           posOffAmounts = offAmounts.slice(largestNeg+1);
           negOffAmounts = offAmounts.slice(0, largestNeg+1);
-          // debugger 
         }
-      }
+      } //ends single excess / owed subsetsum combos
 
 
       // max amount of excess combos will be limited to number of risk types (ie five)
-      // bestNumCombos = 2; bestNumCombos++ each iteration until reaching pos/neg length
+      let bestExcessCombos = 2; // bestExcessCombos++ each iteration until reaching posOffAmounts length
       // permutations of sums (which sum of excess === sum of lessThan)
+      while (bestExcessCombos < posOffAmounts.length) { // <=
 
+        // for (let i = 1)
+        // bestExcessCombos++;
+      }
       
+
+
+
+
       //transfer to text values
       let recommendText = [];
       recTrans.forEach(subArr => {
@@ -281,7 +320,7 @@ function UserInfo() {
             recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
           })
         }
-        else { //both arrays
+        else { //both arrays 
 
         }
       })
@@ -293,7 +332,6 @@ function UserInfo() {
   }
 
   return (
-    
     
     <div className="personalize-main-div">
       <div className="user-img"></div>
