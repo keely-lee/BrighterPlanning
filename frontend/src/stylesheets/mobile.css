@@ -38,7 +38,34 @@
     .personalize-main-div h1 { font-size: 1.5em }
     .personalize-div-wrapper { font-size: .8em }
 
+    /* LEFT SIDE */
+    .personalize-risk-section { padding: 5px }
+
+    .personalize-left h3 { 
+      margin: 0;
+      margin-bottom: .8em;
+    }
+
+    [class*='-input-div'] {
+      padding: 0;
+      margin: 5px;
+    }
+
     .personalize-left input { width: 5em }
+
+    .recommended-plan-div {
+      padding: 5px 7px;
+      width: fit-content;
+      height: fit-content;
+    }
+
+    .recommended-plan-div > div {
+      padding: 0;
+      margin: 12px 0;
+    }
+
+    /* RIGHT SIDE */
+    .risk-section { margin: 0 0 0 auto }
 
 
 }  
@@ -66,8 +93,6 @@
 
       .plans-table-div { font-size: .7em }
 
-
-
       .plans-main-charts {
         margin: 1em 0;
         padding-top: .4em;
@@ -87,21 +112,9 @@
       /* LEFT SIDE */
       .personalize-left { flex-direction: column }
 
-      [class*='-input-div'] {
-        padding: 0;
-        margin: 5px;
-      }
-
-      .personalize-risk-section { padding: 5px }
-
-      .personalize-left h3 { 
-        margin: 0;
-        margin-bottom: .8em;
-      }
-
       .recommended-plan-div { 
         margin-top: 2em;
-        padding: 5px;
+        padding: 8px;
         width: fit-content; 
       }
 
@@ -114,15 +127,17 @@
       .personalize-right {
         flex-direction: column;
       }
-      .risk-section > div:first-of-type { padding: 10px; }
-      
-      .risk-section { margin: auto 0 }
 
+      .risk-section > div:first-of-type { padding: 10px }
+      
       .recommended-trans-div {
         width: 140%;
         position: relative;
-        top: 1em;
+        top: 3em;
         left: -5em;
+        background-color: whitesmoke;
+        padding: 5px;
+        border-radius: 5px;
       }
 
 }
@@ -154,6 +169,12 @@
 
     .donut-chart-div { height: 80vh }
     .plans-main-charts > div tspan { font-size: 1.15em }
+
+
+    /* USER MAIN */
+    .personalize-risk-section, .recommended-trans-div { padding-right: 10px }
+
+
 
   }
 
