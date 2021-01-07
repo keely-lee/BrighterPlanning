@@ -15,9 +15,12 @@ function PlansMain(props) {
   const portfolios = useSelector(state => state.entities.portfolios.data)
   const data = useSelector(state => state.entities.plans);
 
+  const donutPresent = data.length === 1 ? "plans-split" : "";
 
   useEffect(() => {
     dispatch(grabPortfolios())
+    // const donut = document.getElementsByClassName('donut-chart-div')[0].highcharts();
+    // donut.reflow();
   }, []) //dispatch on initial mount
 
   return (
@@ -26,7 +29,7 @@ function PlansMain(props) {
         <span>Select A Risk Plan</span>
         { data.length ? <Link to="/personalize">Calculate</Link> : null }
       </div>
-      <div className="plans-main-base">
+      <div className={`plans-main-base ${donutPresent}`}>
         <Portfolio 
           plans={portfolios} 
           chosenPlans={data}

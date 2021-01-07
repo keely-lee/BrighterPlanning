@@ -58,7 +58,11 @@ function DonutChart(props) {
     // categories
     <div className="donut-chart-div">
       { data ? 
-        <HighchartsReact highcharts={Highcharts} options={options} />
+        <HighchartsReact 
+          highcharts={Highcharts} 
+          options={options}      
+          // containerProps={{style: {height: '87vh', width: '50vw'} }}
+        />
       : null }
     </div>
   );
