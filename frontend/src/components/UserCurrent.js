@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import '../stylesheets/userCurrent.css';
@@ -287,7 +287,7 @@ function UserInfo() {
             recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
           })
         }
-        else { //both arrays   [3,4] owed, [2,5] excess
+        else { //both arrays
           let currExcess = excess.pop();
           let currOwed = owed.pop();
 
