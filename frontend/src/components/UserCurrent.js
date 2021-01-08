@@ -382,6 +382,7 @@ function UserInfo() {
                     <label htmlFor={ctg}>{ctg}</label>
                     <input type="text"
                       onChange={updateAmount(ctg)}
+                      value={userPortfolio[ctg] ? userPortfolio[ctg] : ""}
                     />
                     { recDiff || recDiff === 0 ? <span className={`rec-${color}`}>{arrow} $ {Math.abs(recDiff).toFixed(2)}</span> : null }
                   </div>

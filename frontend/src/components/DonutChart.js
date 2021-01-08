@@ -55,9 +55,9 @@ function DonutChart(props) {
       headerFormat: '<b>{point.plan}</b>',
       pointFormat: '<b>{point.percentage}%</b>'
     },
-    credits: {
-      enabled: false
-    }
+    // credits: {
+    //   enabled: false
+    // }
   } : null;
 
   return (
