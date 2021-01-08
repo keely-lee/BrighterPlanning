@@ -132,37 +132,24 @@ function UserInfo() {
     }
   }
 
-  let pSums = {}; //key:value => sum: [elements added to make sum]. length == val.length 
-  function _permSums(arr, length, sub = [], curr = 0) { //find all permutations of sums from length num elements
-    if (sub.length === length) return sub;
-    let temp = [];
+    // const permutator = (inputArr) => {
+    //   let result = [];
 
-    for (let i = curr+1; i < arr.length; i++) {
-      temp.push(arr[curr] + arr[i]);
-    }
+    //   const permute = (arr, m = []) => {
+    //     if (arr.length === 0) {
+    //       result.push(m)
+    //     } else {
+    //       for (let i = 0; i < arr.length; i++) {
+    //         let curr = arr.slice();
+    //         let next = curr.splice(i, 1);
+    //         permute(curr.slice(), m.concat(next))
+    //       }
+    //     }
+    //   }
 
-
-  }
-
-
-      const permutator = (inputArr) => {
-        let result = [];
-
-        const permute = (arr, m = []) => {
-          if (arr.length === 0) {
-            result.push(m)
-          } else {
-            for (let i = 0; i < arr.length; i++) {
-              let curr = arr.slice();
-              let next = curr.splice(i, 1);
-              permute(curr.slice(), m.concat(next))
-            }
-          }
-        }
-
-        permute(inputArr)
-        return result;
-      }
+    //   permute(inputArr)
+    //   return result;
+    // }
 
 
   function calculate(e) {
@@ -288,7 +275,7 @@ function UserInfo() {
 
 
       // max amount of excess combos will be limited to number of risk types (ie five)
-      let bestExcessCombos = 2; // bestExcessCombos++ each iteration until reaching posOffAmounts length
+      let bestExcessCombos = 2; // bestExcessCombos++ each iteration until reaching posOffAmounts.length
       // permutations of sums (which sum of excess === sum of lessThan)
       while (bestExcessCombos < posOffAmounts.length) { // <=
 
