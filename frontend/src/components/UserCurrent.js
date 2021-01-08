@@ -222,69 +222,49 @@ function UserInfo() {
         }
       }
 
+
       // next grab any owed combo with singular excess
-      let firstIteration = true;
-      while ((Object.keys(sums).length || firstIteration) && offAmounts.length > 0) {
-        firstIteration = false;
-
-        //if one lessThan acct or one moreThan acct
+        // if one lessThan acct or one moreThan acct, 
+        // else remaining cannot be broken down further (THIS IS ONLY BECAUSE OF THE LIMITED NUM OF ACCTS. If more num of accts, find matching for smallest num of excess summed == smallest num of neg summed.)
         if (posOffAmounts.length === 1 || negOffAmounts.length === 1) {
-            if (negOffAmounts.length === 1) {
-              recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
-              break;
-            } else {
-              recTrans.push([negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]]);
-              break;
-            }
-        }
+          if (negOffAmounts.length === 1) recTrans.push([Math.abs(negOffAmounts[0]), posOffAmounts]);
+          else recTrans.push([negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts[0]]);
+        } else {
+          recTrans.push([negOffAmounts.map(amt => Math.abs(amt)), posOffAmounts]);
 
+          // let bestNum = negOffAmounts.length;
+          // let bestRec = [];
+          // let bestExcessIdx = offAmounts.length-1;
+          // let bestIndices = []; //for slicing
 
-        let bestNum = negOffAmounts.length;
-        let bestRec = [];
-        let bestExcessIdx = offAmounts.length-1;
-        let bestIndices = []; //for slicing
+          // for (let i = offAmounts.length-1; i > largestNeg; i--) {
+          //   sums = {}; //reassign sums for each iteration
 
-        for (let i = offAmounts.length-1; i > largestNeg; i--) {
-          sums = {}; //reassign sums for each iteration
+          //   _subsetSum(negOffAmounts, offAmounts[i] * -1);
 
-          _subsetSum(negOffAmounts, offAmounts[i] * -1);
+          //   let cost = parseInt(Object.keys(sums)[0]);
+          //   if (bestNum > cost) {
+          //     bestNum = cost;
+          //     bestExcessIdx = i;
+          //     bestIndices = sums[cost].pop(); 
+          //   }
+          // }
 
-          let cost = parseInt(Object.keys(sums)[0]);
-          if (bestNum > cost) {
-            bestNum = cost;
-            bestExcessIdx = i;
-            bestIndices = sums[cost].pop(); 
-          }
-        }
+          // // confirmed, best group is the best of this iteration
+          // if (Object.keys(sums).length) { 
+          //   for (let i = bestIndices.length-1; i >= 0; i--) {
+          //     bestRec.push(offAmounts[i]);
+          //     offAmounts = offAmounts.slice(0, i+1).concat(offAmounts.slice(i+1));
+          //   }
 
-        // confirmed, best group is the best of this iteration
-        if (Object.keys(sums).length) { 
-          for (let i = bestIndices.length-1; i >= 0; i--) {
-            bestRec.push(offAmounts[i]);
-            offAmounts = offAmounts.slice(0, i+1).concat(offAmounts.slice(i+1));
-          }
-
-          bestExcessIdx -= bestIndices.length; //adjust for sliced negs
-          recTrans.push([bestRec, offAmounts[bestExcessIdx]]); //can sum for offAmounts[bestExcessIdx], but use index for QA
-          offAmounts = offAmounts.slice(0, bestExcessIdx).concat(offAmounts.slice(bestExcessIdx+1));
-          largestNeg = largestNeg - bestIndices.length;
-          posOffAmounts = offAmounts.slice(largestNeg+1);
-          negOffAmounts = offAmounts.slice(0, largestNeg+1);
-        }
-      } //ends single excess / owed subsetsum combos
-
-
-      // max amount of excess combos will be limited to number of risk types (ie five)
-      let bestExcessCombos = 2; // bestExcessCombos++ each iteration until reaching posOffAmounts.length
-      // permutations of sums (which sum of excess === sum of lessThan)
-      while (bestExcessCombos < posOffAmounts.length) { // <=
-
-        // for (let i = 1)
-        // bestExcessCombos++;
+          //   bestExcessIdx -= bestIndices.length; //adjust for sliced negs
+          //   recTrans.push([bestRec, offAmounts[bestExcessIdx]]); //can sum for offAmounts[bestExcessIdx], but use index for QA
+          //   offAmounts = offAmounts.slice(0, bestExcessIdx).concat(offAmounts.slice(bestExcessIdx+1));
+          //   largestNeg = largestNeg - bestIndices.length;
+          //   posOffAmounts = offAmounts.slice(largestNeg+1);
+          //   negOffAmounts = offAmounts.slice(0, largestNeg+1);
+          // }
       }
-      
-
-
 
 
       //transfer to text values
@@ -307,8 +287,32 @@ function UserInfo() {
             recommendText.push(`Transfer $${excessAmt} from ${moreThanRec[excessAmt].pop()} to ${singleAcct}.`);
           })
         }
-        else { //both arrays 
+        else { //both arrays   [3,4] owed, [2,5] excess
+          debugger
+          let currExcess = excess.pop();
+          let currOwed = owed.pop();
 
+          let currExcessAcct = moreThanRec[currExcess].pop();
+          let currOwedAcct = lessThanRec[currOwed].pop();
+
+          debugger
+          while (currExcess || currOwed) {
+            const deduct = Math.min(currExcess, currOwed);
+            recommendText.push(`Transfer ${deduct} from ${currExcessAcct} to ${currOwedAcct}.`)
+            currExcess -= deduct;
+            currOwed -= deduct;
+
+            debugger
+            if (currExcess) {
+              debugger
+              currOwed = owed.pop();
+              currOwedAcct = lessThanRec[currOwed].pop();
+            } else if (currOwed) {
+              debugger
+              currExcess = excess.pop();
+              currExcessAcct = moreThanRec[currExcess].pop();
+            } else break; //unnecessary break
+          }
         }
       })
 
