@@ -295,12 +295,11 @@ function UserInfo() {
           let currOwedAcct = lessThanRec[currOwed].pop();
 
           while (currExcess || currOwed) {
-            const deduct = Math.min(currExcess, currOwed);
-            recommendText.push(`Transfer ${deduct} from ${currExcessAcct} to ${currOwedAcct}.`)
-            currExcess -= deduct;
-            currOwed -= deduct;
+            let deduct = Math.min(currExcess, currOwed);
+            recommendText.push(`Transfer ${deduct} from ${currExcessAcct} to ${currOwedAcct}.`);
 
-            // ADDRESS ISSUE DEDUCTING FLOAT
+            currExcess = Math.floor((currExcess - deduct) * 1000)/1000;
+            currOwed = Math.floor((currOwed - deduct) * 1000)/1000;
 
             if (currExcess) {
               currOwed = owed.pop();
