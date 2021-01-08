@@ -172,6 +172,11 @@
 
     /* USER MAIN */
     .personalize-risk-section, .recommended-trans-div { padding-right: 10px }
+    
+    .recommended-trans-div > h3 { 
+      margin: 0;
+      margin-top: .2em;
+    }
 
   }
 
