@@ -288,27 +288,24 @@ function UserInfo() {
           })
         }
         else { //both arrays   [3,4] owed, [2,5] excess
-          debugger
           let currExcess = excess.pop();
           let currOwed = owed.pop();
 
           let currExcessAcct = moreThanRec[currExcess].pop();
           let currOwedAcct = lessThanRec[currOwed].pop();
 
-          debugger
           while (currExcess || currOwed) {
             const deduct = Math.min(currExcess, currOwed);
             recommendText.push(`Transfer ${deduct} from ${currExcessAcct} to ${currOwedAcct}.`)
             currExcess -= deduct;
             currOwed -= deduct;
 
-            debugger
+            // ADDRESS ISSUE DEDUCTING FLOAT
+
             if (currExcess) {
-              debugger
               currOwed = owed.pop();
               currOwedAcct = lessThanRec[currOwed].pop();
             } else if (currOwed) {
-              debugger
               currExcess = excess.pop();
               currExcessAcct = moreThanRec[currExcess].pop();
             } else break; //unnecessary break
