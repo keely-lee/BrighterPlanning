@@ -12,7 +12,7 @@
   margin-bottom: 3px; /* To make up space for box-shadow */
 }
 
-#navbar a:first-child {
+#navbar > a:first-child {
   color: whitesmoke;
   font-size: 1.5em;
   text-decoration: none;
@@ -39,4 +39,24 @@
 .nav-contact p {
   margin: 0;
   font-weight: bolder;
+}
+
+.nav-contact a:first-of-type {
+  text-decoration: none;
+  color: #555B6E;
+  padding-top: 5px;
+}
+
+.nav-contact a:first-of-type:hover, .nav-contact-links a:hover {
+  color: white;
+}
+
+.nav-contact-links {
+  display: flex;
+}
+
+.nav-contact-links a {
+  color: #555B6E;
+  padding: 4px;
+  font-size: 1.3em;
 }
