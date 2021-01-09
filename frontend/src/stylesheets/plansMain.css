@@ -38,6 +38,7 @@
 .plans-main-charts {
   margin-top: auto;
   margin-bottom: auto;
+  overflow: hidden;
 }
 
 .plans-main-charts > div {

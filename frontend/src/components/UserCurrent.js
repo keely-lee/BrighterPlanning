@@ -29,7 +29,6 @@ function UserInfo() {
     return e => {
       //figure out regex solution if you have time
       // const entered = e.currentTarget.value.replace(/,/g, ""); 
-      let entered = e.currentTarget.value.split(".");
 
       //when potentially fixing error, clear the error
       if ( inputErrors[category] ) {
@@ -38,25 +37,35 @@ function UserInfo() {
         setInputErrors(tempErrors);
       }
 
-      //checks for valid number entered: max two decimal places, adjust for $ sign. Use better validity checks!!  //if length of decimal is more than 2, must be === 0 or parseFloat will make length less than 2 (meaning 0s only after 2nd decimal)
-      if (entered.length > 2 || (entered.length === 2 && isNaN(entered[1])) || (entered.length === 2 && entered[1].length > 2)) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set
-      if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
+      setUserPortfolio(Object.assign({}, userPortfolio, { [category]: e.currentTarget.value }));
+    //   let entered = e.currentTarget.value.split(".");
+    //   //checks for valid number entered: max two decimal places, adjust for $ sign. Use better validity checks!!  //if length of decimal is more than 2, must be === 0 or parseFloat will make length less than 2 (meaning 0s only after 2nd decimal)
+    //   if (entered.length > 2) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set for errors
+    //   if (entered.length === 2) {
+    //     if(entered[1].length > 2 || (isNaN(entered[1]) && entered[1] !== "")) return setInputErrors(Object.assign({}, inputErrors, { [category]: true }))
+    //   };
 
-      // check validity: appropriate commas
-      for (let i = entered[0].length-4; i > 0; i-=4) { 
-        if (entered[0][i] === ",") entered[0] = entered[0].slice(0, i) + entered[0].slice(i+1); 
-        else break;
-      }
+    //   if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
 
-      if (!isNaN(entered.join("."))) {
-        const newState = Object.assign({}, userPortfolio);
-        newState[category] = parseFloat(entered.join("."));
-        setUserPortfolio(newState);
-      } 
-      else {
-        setInputErrors(Object.assign({}, inputErrors, { [category]: true }))
-      }
+    //   // check validity: appropriate commas
+    //   for (let i = entered[0].length-4; i > 0; i-=4) { 
+    //     if (entered[0][i] === ",") entered[0] = entered[0].slice(0, i) + entered[0].slice(i+1); 
+    //     else break;
+    //   }
+
+    //   if (!isNaN(entered.join("."))) {
+    //     const newState = Object.assign({}, userPortfolio);
+    //     newState[category] = parseFloat(entered.join("."));
+    //     setUserPortfolio(newState);
+    //   } 
+    //   else {
+    //     setInputErrors(Object.assign({}, inputErrors, { [category]: true }))
+    //   }
     }
+  }
+
+  function _checkString() {
+    
   }
 
   function confirmValid() {
