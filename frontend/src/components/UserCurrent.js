@@ -302,7 +302,7 @@ function UserInfo() {
 
           while (currExcess || currOwed) {
             let deduct = Math.min(currExcess, currOwed);
-            recommendText.push(`Transfer ${deduct} from ${currExcessAcct} to ${currOwedAcct}.`);
+            recommendText.push(`Transfer $${deduct} from ${currExcessAcct} to ${currOwedAcct}.`);
 
             currExcess = Math.floor((currExcess - deduct) * 1000)/1000;
             currOwed = Math.floor((currOwed - deduct) * 1000)/1000;
