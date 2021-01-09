@@ -37,15 +37,8 @@ function UserInfo() {
         setInputErrors(tempErrors);
       }
 
-      setUserPortfolio(Object.assign({}, userPortfolio, { [category]: e.currentTarget.value }));
-      _checkString(e.currentTarget.value, category);
-    }
-  }
+      let entered = e.currentTarget.value.split(".");
 
-  function _checkString(input, category) {
-      let entered = input.split(".");
-
-      debugger
       //checks for valid number entered: max two decimal places, adjust for $ sign. Use better validity checks!!  //if length of decimal is more than 2, must be === 0 or parseFloat will make length less than 2 (meaning 0s only after 2nd decimal)
       if (entered.length > 2) return setInputErrors(Object.assign({}, inputErrors, { [category]: true })) //consider using a set for errors
       if (entered.length === 2) {
@@ -53,26 +46,25 @@ function UserInfo() {
       };
 
       if (entered[0][0] === "$") entered[0] = entered[0].slice(1);
-
+      
       // check validity: appropriate commas
       for (let i = entered[0].length-4; i > 0; i-=4) { 
         if (entered[0][i] === ",") entered[0] = entered[0].slice(0, i) + entered[0].slice(i+1); 
         else break;
       }
 
+
       debugger
-      if (!isNaN(entered.join("."))) {
-        debugger
+      if (entered.join(".") === "") {
+        setUserPortfolio(Object.assign({}, userPortfolio, {[category]: 0.0}));
+      } else if (!isNaN(entered.join("."))){
         const newState = Object.assign({}, userPortfolio);
         newState[category] = parseFloat(entered.join("."));
         setUserPortfolio(newState);
-        debugger
-      } 
-      else {
-        debugger
+      } else {
         setInputErrors(Object.assign({}, inputErrors, { [category]: true }))
-        debugger
       }
+    }
   }
 
   function confirmValid() {
@@ -169,6 +161,8 @@ function UserInfo() {
 
   function calculate(e) {
     e.preventDefault();
+
+    debugger
     if (confirmValid()) {
       // Research accounting concepts
 
@@ -210,6 +204,8 @@ function UserInfo() {
       })
       setRecPortfolio(makeRecPortfolio);
 
+      debugger
+
       if (!Object.keys(moreThanRec).length) return setRecTransfers(["No transfers needed, your portfolio is optimal!"]); //no transfers needed - portfolio matches recommended plan
 
       _insertionSort(offAmounts); //sort off amounts
@@ -219,6 +215,7 @@ function UserInfo() {
       let posOffAmounts = offAmounts.slice(largestNeg+1); //avoid constant slicing if unnecessary
       let negOffAmounts = offAmounts.slice(0, largestNeg+1);
       
+      debugger
       // first grab any matching differences
       for (let i = 0; i <= largestNeg; i++) {
         const current = Math.abs(offAmounts[i]);
@@ -382,10 +379,7 @@ function UserInfo() {
                 return (
                   <div key={ctg} className={`${ctg}-div personalize-input-div`}>
                     <label htmlFor={ctg}>{ctg}</label>
-                    <input type="text"
-                      onChange={updateAmount(ctg)}
-                      value={userPortfolio[ctg] ? userPortfolio[ctg] : ""}
-                    />
+                    <input type="text" onChange={updateAmount(ctg)}/>
                     { recDiff || recDiff === 0 ? <span className={`rec-${color}`}>{arrow} $ {Math.abs(recDiff).toFixed(2)}</span> : null }
                   </div>
                 )
