@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Highcharts from 'highcharts';
@@ -19,22 +19,14 @@ function PlansMain(props) {
   const donutPresent = data.length === 1 ? "plans-split" : "";
 
   useEffect(() => {
-    dispatch(grabPortfolios());
-
-    console.log("first effect")
+      dispatch(grabPortfolios());
   }, []) //dispatch on initial mount
 
   useEffect(() => {
-    console.log("second effect")
-    const donut = data.length === 1 ? Highcharts.charts[0] : "";
+    const donut = data.length === 1 ? Highcharts.charts[Highcharts.charts.length-1] : "";
     if (donut) donut.reflow();
   }, [data.length])
 
-  // useEffect(() => {
-  //   console.log("third effect")
-  //   const donut = data.length === 1 ? Highcharts.charts[0] : "";
-  //   if (donut) donut.reflow();
-  // }, [Object.keys(portfolios)]) //temporary
 
   return (
     <div className="plans-main-div">
