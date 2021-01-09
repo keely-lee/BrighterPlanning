@@ -53,8 +53,6 @@ function UserInfo() {
         else break;
       }
 
-
-      debugger
       if (entered.join(".") === "") {
         setUserPortfolio(Object.assign({}, userPortfolio, {[category]: 0.0}));
       } else if (!isNaN(entered.join("."))){
@@ -162,7 +160,6 @@ function UserInfo() {
   function calculate(e) {
     e.preventDefault();
 
-    debugger
     if (confirmValid()) {
       // Research accounting concepts
 
@@ -204,8 +201,6 @@ function UserInfo() {
       })
       setRecPortfolio(makeRecPortfolio);
 
-      debugger
-
       if (!Object.keys(moreThanRec).length) return setRecTransfers(["No transfers needed, your portfolio is optimal!"]); //no transfers needed - portfolio matches recommended plan
 
       _insertionSort(offAmounts); //sort off amounts
@@ -215,7 +210,6 @@ function UserInfo() {
       let posOffAmounts = offAmounts.slice(largestNeg+1); //avoid constant slicing if unnecessary
       let negOffAmounts = offAmounts.slice(0, largestNeg+1);
       
-      debugger
       // first grab any matching differences
       for (let i = 0; i <= largestNeg; i++) {
         const current = Math.abs(offAmounts[i]);
@@ -371,6 +365,8 @@ function UserInfo() {
                 let recDiff;
                 let color; 
                 let arrow; 
+                let ctgErr = inputErrors[ctg] ? `${ctg}-input-errors` : "";
+                
                 if (Object.keys(recPortfolio).length) {
                   recDiff = (recPortfolio[ctg] - userPortfolio[ctg]) ? recPortfolio[ctg] - userPortfolio[ctg] : null;
                   color = recDiff > 0 ? "green" : "red";
@@ -379,7 +375,10 @@ function UserInfo() {
                 return (
                   <div key={ctg} className={`${ctg}-div personalize-input-div`}>
                     <label htmlFor={ctg}>{ctg}</label>
-                    <input type="text" onChange={updateAmount(ctg)}/>
+                    <input type="text" 
+                      onChange={updateAmount(ctg)}
+                      className={ctgErr}
+                    />
                     { recDiff || recDiff === 0 ? <span className={`rec-${color}`}>{arrow} $ {Math.abs(recDiff).toFixed(2)}</span> : null }
                   </div>
                 )
