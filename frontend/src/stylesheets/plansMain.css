@@ -1,0 +1,59 @@
+.plans-main-div {
+  display: flex;
+  max-width: 100vw;
+  height: 87vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.plans-main-base {
+  min-width: 42%;
+  margin: auto;
+  padding-bottom: 1.5em;
+  border: 1px solid black;
+}
+
+.label-header {
+  position: absolute;
+  width: 50vw;
+  font-size: 1.5em;
+  padding-top: 2em;
+  margin: auto;
+}
+
+.label-header span {
+  padding-left: 10vw;
+  text-decoration: underline;
+}
+
+.label-header a {
+  color: #e67a5c;
+  text-decoration: none;
+  margin-left: 12vw;
+}
+
+
+
+
+.plans-main-charts {
+  margin-top: auto;
+  margin-bottom: auto;
+  overflow: hidden;
+}
+
+.plans-main-charts > div {
+  width: 100%;
+  /* margin: auto; */
+}
+
+.plans-main-charts > div tspan {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+
+
+/* DonutChart */
+.donut-chart-div rect {
+  fill: none;
+}

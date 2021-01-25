@@ -1,0 +1,136 @@
+.personalize-main-div {
+  margin-left: auto; 
+  margin-right: auto;
+  height: 87vh;
+}
+
+.personalize-main-div h1 {
+  text-align: center;
+}
+
+#risk-section-header {
+  margin: 8px 0 15px 0;
+}
+
+.personalize-div-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 90vw;
+  justify-content: space-evenly;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.user-img {
+  background-image: url("../images/user-current-img.jpg");
+  margin-top: 10px;
+  width: 100vw;
+  height: 15vh;
+  background-position: center;
+  background-size: cover;
+  /* opacity: .6; */
+}
+
+
+/* left side */
+.personalize-left {
+  min-width: fit-content;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+}
+
+
+.personalize-risk-section {
+  padding-top: 10px;
+  padding-right: 20px;
+}
+
+.personalize-risk-section button {
+  margin-top: 10px;
+}
+
+.personalize-input-div {
+  padding: 5px;
+}
+
+.personalize-input-div label {
+  padding-right: 15px;
+}
+
+.fa-arrow-up, .fa-arrow-down {
+  font-size: .8em;
+  margin-left: 10px;
+}
+
+.rec-green {
+  color: green;
+}
+
+.rec-red {
+  color: red;
+}
+
+[class*="input-errors"] {
+  border: 2px solid crimson; 
+  border-radius: 2px;
+  /* border-color: crimson; */
+}
+
+
+
+.recommended-plan-div {
+  border: 2px solid black;
+  padding: 10px;
+  /* height: 45vh; */
+  /* width: 40%; */
+}
+
+.recommended-plan-div div {
+  margin: 0;
+  padding: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+
+
+
+
+/* right side */
+.personalize-right {
+  min-width: 35%;
+  padding: 5px;
+  display: flex;
+  flex-direction: row-reverse
+}
+
+
+
+
+.risk-section {
+  border: 1px solid black;
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+}
+
+.risk-section > div {
+  padding: 15px;
+}
+
+.risk-section > div div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.risk-section > div span:first-of-type {
+  padding-right: 20px;
+}
+
+.recommended-trans-div {
+  padding-right: 20px;
+}
