@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/BrighterPlanning/static/css/main.7fb16def.chunk.css",
+    "main.js": "/BrighterPlanning/static/js/main.ba5f59ee.chunk.js",
+    "main.js.map": "/BrighterPlanning/static/js/main.ba5f59ee.chunk.js.map",
+    "runtime-main.js": "/BrighterPlanning/static/js/runtime-main.d9e96b40.js",
+    "runtime-main.js.map": "/BrighterPlanning/static/js/runtime-main.d9e96b40.js.map",
+    "static/js/2.337fade8.chunk.js": "/BrighterPlanning/static/js/2.337fade8.chunk.js",
+    "static/js/2.337fade8.chunk.js.map": "/BrighterPlanning/static/js/2.337fade8.chunk.js.map",
+    "index.html": "/BrighterPlanning/index.html",
+    "static/css/main.7fb16def.chunk.css.map": "/BrighterPlanning/static/css/main.7fb16def.chunk.css.map",
+    "static/js/2.337fade8.chunk.js.LICENSE.txt": "/BrighterPlanning/static/js/2.337fade8.chunk.js.LICENSE.txt",
+    "static/media/splash.css": "/BrighterPlanning/static/media/splash-img.4aea87c2.jpg",
+    "static/media/userCurrent.css": "/BrighterPlanning/static/media/user-current-img.bb1ccacc.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d9e96b40.js",
+    "static/js/2.337fade8.chunk.js",
+    "static/css/main.7fb16def.chunk.css",
+    "static/js/main.ba5f59ee.chunk.js"
+  ]
+}
