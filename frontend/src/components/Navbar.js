@@ -15,7 +15,7 @@ function Nav(props) {
           className="nav-contact-button"
           onClick={() => toggleContactDropdown(true)} 
           onBlur={() => {
-            if (!clickLink) toggleContactDropdown(false);
+            if (!clickLink) toggleContactDropdown(false); 
           }}
         >Contact Us</button>
         { contactDropdown ? 
