@@ -32,7 +32,8 @@
   border: 1px solid gray;
   border-radius: 3px;
   padding: 5px;
-  background-color: rgb(233, 227, 227);
+  background-color: rgb(233, 227, 227) !important;
+  z-index: 10;
   /* opacity: 0.9; */
 }
 
