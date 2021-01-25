@@ -1,6 +1,6 @@
 # README
 
-BrighterPlanning is a financial tool used to aid the user in reconstructing their portfolio to optimal performance for their risk assessed needs.
+<a href="https://keely-lee.github.io/BrighterPlanning/">BrighterPlanning</a> is a financial tool used to aid the user in reconstructing their portfolio to optimal performance for their risk assessed needs.
  
 To run BrighterPlanning on your local computer, download/clone the project to the appropriate directory. In your terminal, navigate to the root directory, and <code>npm install</code>.
 
